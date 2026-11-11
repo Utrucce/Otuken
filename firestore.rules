@@ -1,0 +1,93 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function validOtag(otag) {
+      return otag in ['kurultay', 'spor', 'kitap', 'robotik', 'yazilim', 'kervan', 'alp', 'bilge', 'demirci', 'bilisim'];
+    }
+
+    function isSignedInVerified() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+
+    // 1. Bengü Taşlar (Er Künyeleri)
+    match /bengutaslar/{userId} {
+      allow read: if true;
+
+      allow create, update: if (isSignedInVerified() || request.resource.data.verified == true)
+        && request.resource.data.keys().hasAll(['uid', 'name', 'tamga', 'kut', 'streak'])
+        && request.resource.data.uid == userId
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 1
+        && request.resource.data.name.size() <= 60
+        && request.resource.data.tamga is string
+        && request.resource.data.tamga.size() <= 12
+        && request.resource.data.kut is number
+        && request.resource.data.kut >= 0
+        && request.resource.data.streak is number
+        && request.resource.data.streak >= 0;
+
+      allow delete: if isSignedInVerified() && request.auth.uid == userId;
+    }
+
+    // 2. Bitigler (Otağ Paylaşımları)
+    match /bitigler/{postId} {
+      allow read: if true;
+
+      allow create: if (isSignedInVerified() || request.resource.data.authorUid is string)
+        && request.resource.data.keys().hasAll(['otag', 'authorUid', 'authorName', 'title', 'body', 'kutCount', 'createdAt'])
+        && validOtag(request.resource.data.otag)
+        && request.resource.data.title is string
+        && request.resource.data.title.size() >= 2
+        && request.resource.data.title.size() <= 160
+        && request.resource.data.body is string
+        && request.resource.data.body.size() >= 2
+        && request.resource.data.body.size() <= 5000;
+
+      allow update: if (isSignedInVerified() || request.resource.data.authorUid == resource.data.authorUid)
+        && request.resource.data.title == resource.data.title
+        && request.resource.data.body == resource.data.body
+        && request.resource.data.otag == resource.data.otag;
+
+      allow delete: if isSignedInVerified() && resource.data.authorUid == request.auth.uid;
+    }
+
+    // 3. Ocak Başı Anlık Sohbet
+    match /ocak_sohbet/{msgId} {
+      allow read: if true;
+
+      allow create: if (isSignedInVerified() || request.resource.data.authorUid is string)
+        && request.resource.data.keys().hasAll(['otag', 'authorUid', 'authorName', 'text', 'createdAt'])
+        && validOtag(request.resource.data.otag)
+        && request.resource.data.text is string
+        && request.resource.data.text.size() >= 1
+        && request.resource.data.text.size() <= 350;
+
+      allow update: if false;
+      allow delete: if isSignedInVerified() && resource.data.authorUid == request.auth.uid;
+    }
+
+    // 4. Anda (Yol Arkadaşı / Badilik) İlanları
+    match /anda_ilanlari/{ilanId} {
+      allow read: if true;
+
+      allow create: if (isSignedInVerified() || request.resource.data.authorUid is string)
+        && request.resource.data.keys().hasAll(['authorUid', 'authorName', 'offer', 'seek', 'note'])
+        && request.resource.data.offer is string
+        && request.resource.data.offer.size() <= 180
+        && request.resource.data.seek is string
+        && request.resource.data.seek.size() <= 180
+        && request.resource.data.note is string
+        && request.resource.data.note.size() <= 400;
+
+      allow update: if request.resource.data.authorUid == resource.data.authorUid;
+      allow delete: if isSignedInVerified() && resource.data.authorUid == request.auth.uid;
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
