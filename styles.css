@@ -969,3 +969,374 @@ body {
     height: 155px;
   }
 }
+
+
+/* ==========================================================================
+   GİRİŞ & KAYIT KAPISI (AUTH GATE) VE YENİ SOSYAL MEDYA DÜZENİ
+   ========================================================================== */
+.auth-gate-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  position: relative;
+  z-index: 20;
+}
+
+.auth-gate-card {
+  width: 100%;
+  max-width: 450px;
+  background: rgba(8, 13, 24, 0.92);
+  backdrop-filter: blur(18px);
+  border: 1.5px solid var(--border-gold);
+  border-radius: 20px;
+  padding: 26px 24px;
+  box-shadow: var(--shadow-deep), var(--shadow-glow-gold);
+}
+
+.auth-gate-header {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.auth-gate-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  border: 2px solid var(--fire-amber);
+  margin-bottom: 8px;
+  object-fit: cover;
+}
+
+.auth-gate-header h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.65rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.auth-gate-header p {
+  font-size: 0.82rem;
+  color: var(--turk-cyan-light);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.auth-gate-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 5px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.gate-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 9px 12px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.gate-tab-btn.active {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #05080f;
+}
+
+.auth-google-btn {
+  width: 100%;
+  padding: 11px 14px;
+  font-size: 0.9rem;
+  justify-content: center;
+}
+
+.auth-divider {
+  text-align: center;
+  margin: 14px 0;
+  position: relative;
+}
+
+.auth-divider::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.auth-divider span {
+  position: relative;
+  background: #09101d;
+  padding: 0 10px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.form-group label,
+.field-label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.gate-tamga-row {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 5px;
+}
+
+.gate-tamga-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 6px 0;
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.gate-tamga-btn.selected {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: var(--fire-amber);
+  transform: scale(1.06);
+}
+
+.terms-consent-row {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 10px;
+  padding: 9px 11px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  margin-top: 3px;
+  accent-color: var(--fire-amber);
+  width: 16px;
+  height: 16px;
+}
+
+.inline-link-btn {
+  background: none;
+  border: none;
+  color: var(--turk-cyan-light);
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+}
+
+.inline-link-btn:hover {
+  color: var(--fire-amber);
+}
+
+.auth-submit-btn {
+  width: 100%;
+  padding: 11px;
+  font-size: 0.94rem;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.verify-code-box {
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px dashed var(--turk-cyan-light);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.verify-code-box span {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.verify-code-box strong {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 5px;
+  color: var(--fire-amber);
+}
+
+.auth-gate-footer {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Sosyal Medya 3 Sütunlu Kolay Düzen */
+.app-main {
+  padding-top: 18px;
+}
+
+.social-layout {
+  display: grid;
+  grid-template-columns: 245px 1fr 295px;
+  gap: 18px;
+  align-items: start;
+}
+
+.compact-card {
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.sidebar-heading {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.user-mini-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-mini-card strong {
+  color: #fff;
+  font-size: 0.95rem;
+  display: block;
+}
+
+.user-mini-badges {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 3px;
+  font-size: 0.74rem;
+  color: var(--turk-cyan-light);
+  font-weight: 700;
+}
+
+.composer-box {
+  padding: 15px;
+  margin-bottom: 14px;
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.composer-top {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+}
+
+.composer-WaitBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-wrap: wrap;
+}
+
+.feed-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+  background: rgba(8, 14, 26, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 8px 12px;
+  border-radius: 12px;
+}
+
+.campfire-chat-strip {
+  max-height: 280px;
+  min-height: 150px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 4px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.two-col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.guide-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.guide-step-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 3px solid var(--fire-amber);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.guide-step-item strong {
+  display: block;
+  color: #fff;
+  font-size: 0.9rem;
+  margin-bottom: 3px;
+}
+
+.guide-step-item p {
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+@media (max-width: 1060px) {
+  .social-layout {
+    grid-template-columns: 1fr;
+  }
+  .two-col-grid {
+    grid-template-columns: 1fr;
+  }
+}

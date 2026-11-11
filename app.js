@@ -1,84 +1,88 @@
 /**
  * ============================================================================
- * ÖTÜKEN — Erkekler İçin Kardeşlik, Disiplin, Bilgelik ve Gelişim Ocağı
+ * ÖTÜKEN — Erlerin Gelişim Ağı (Canlı Sosyal Platform)
  * ============================================================================
- * Modüller:
- * 1. 6 Gelişim Otağı (Kurultay Meydanı, Alp/Spor, Bilge/Kitap, Demirci/Robotik, Bilişim/Yazılım, Kervan/Tecrübe)
- * 2. Bengü Taş (Er Künyesi — Mitolojik Kimlik, Türk Damgası, Rütbe, Okunan Kitap, Pusat/Proje, Spor Hedefi, Ant)
- * 3. Ocak Başı Anlık Canlı Sohbet & Bitig (Deneyim/Kod/Kitap/İdman) Paylaşımı
- * 4. Pusat & İrade Zinciri (30 Günlük Zinciri Kırma Meydan Okumaları & Günlük Yoklama)
- * 5. Anda & Yol Arkadaşı (Usta-Çırak / Badilik Eşleşme Ocağı)
- * 6. Toy Kararı (Haftalık Kurultay Oylamaları)
- * 7. Firebase Auth (Gmail Tek Tıkla Giriş + E-posta Doğrulama Bağlantısı Zorunluluğu) & Firestore Spark (Ücretsiz Katman)
- * 8. Sağ Alt 3B Hareketli Bozkurt (Three.js WebGL) & Gerçekçi Dağ Yankılı Uluma Motoru (Web Audio API)
  */
 
 import { FIREBASE_CONFIG, FOUNDER_EMAIL } from './firebase-config.js';
 
-// ============================================================================
-// 1. OTAĞLAR TANIMI VE BAŞLANGIÇ VERİLERİ
-// ============================================================================
 const OTAGLAR = [
+  { id: 'all', icon: '🏛️', name: 'Tüm Otağlar', short: 'Ortak Akış', badge: '🏛️ Tüm Otağlar' },
+  { id: 'kurultay', icon: '🔥', name: 'Kurultay Meydanı', short: 'Tanışma & Sohbet', badge: '🔥 Kurultay Meydanı' },
+  { id: 'spor', icon: '🏋️‍♂️', name: 'Alp Otağı (Spor)', short: 'Kuvvet, Kalistenik & Koşu', badge: '🏋️‍♂️ Alp Otağı (Spor)' },
+  { id: 'kitap', icon: '📚', name: 'Bilge Otağı (Kitap)', short: 'Kitap, Tarih & Felsefe', badge: '📚 Bilge Otağı (Kitap)' },
+  { id: 'robotik', icon: '🤖', name: 'Demirci Otağı (Robotik)', short: 'Arduino, ESP32 & Devre', badge: '🤖 Demirci Otağı (Robotik)' },
+  { id: 'yazilim', icon: '💻', name: 'Bilişim & Yazılım', short: 'Yapay Zekâ, Web & Mobil', badge: '💻 Bilişim & Yazılım' },
+  { id: 'kervan', icon: '🧭', name: 'Kervan & Tecrübe', short: 'Kariyer, Doğa & Hayat', badge: '🧭 Kervan & Tecrübe' }
+];
+
+const INITIAL_CHALLENGES = [
   {
-    id: 'all',
-    icon: '🏛️',
-    name: 'Ulu Kurultay (Bütün Otağlar)',
-    short: 'Tüm Otağların Ortak Akışı',
-    badge: '🏛️ Ulu Kurultay',
-    desc: 'Spor, kitap tahlili, robotik kodlama, yazılım ve hayat tecrübesi otağlarında paylaşılan tüm güncel bitigler.'
+    id: 'ch-seher',
+    icon: '🌅',
+    title: '30 Gün Erken Kalkış (06.00) & Disiplin Zinciri',
+    category: 'İrade & Disiplin',
+    desc: 'Güne erken başlayıp ilk saati telefonsuz şekilde okuma, idman veya üretime ayırma hedefi.',
+    targetDays: 30,
+    participants: 0,
+    myDays: 0
   },
   {
-    id: 'kurultay',
-    icon: '🔥',
-    name: 'Kurultay Meydanı',
-    short: 'Tanışma, Selamlaşma & İstişare',
-    badge: '🔥 Kurultay Meydanı',
-    desc: 'Yeni katılan alplerin kendini tanıttığı, kardeşlik bağlarının kurulduğu ve genel istişarelerin yapıldığı ana meydan.'
-  },
-  {
-    id: 'spor',
+    id: 'ch-idman',
     icon: '🏋️‍♂️',
-    name: 'Alp Otağı (Spor & Kuvvet)',
-    short: 'Kalistenik, Ağırlık, Koşu & Beslenme',
-    badge: '🏋️‍♂️ Alp Otağı',
-    desc: 'Beden terbiyesi, kalistenik, ağırlık idmanı, dayanıklılık koşuları, uyku düzeni ve temiz beslenme disiplini.'
+    title: '30 Günde 20 Antrenman Hedefi',
+    category: 'Alp Otağı (Spor)',
+    desc: 'Haftada en az 4-5 gün ağırlık, kalistenik veya koşu antrenmanını tamamlama zinciri.',
+    targetDays: 20,
+    participants: 0,
+    myDays: 0
   },
   {
-    id: 'kitap',
+    id: 'ch-kitap',
     icon: '📚',
-    name: 'Bilge Otağı (Kitap & Tefekkür)',
-    short: 'Kitap Sohbeti, Tarih, Felsefe & Dil',
-    badge: '📚 Bilge Otağı',
-    desc: 'Okunan eserlerin tahlili, altı çizilen satırlar, Türk tarihi, mitoloji, felsefe ve edebiyat sohbetleri.'
+    title: 'Her Gün 30 Sayfa Kitap Okuma Zinciri',
+    category: 'Bilge Otağı (Kitap)',
+    desc: 'Her gün en az 30 sayfa kitap okumak ve öğrendiklerini otağda paylaşmak.',
+    targetDays: 30,
+    participants: 0,
+    myDays: 0
   },
   {
-    id: 'robotik',
+    id: 'ch-pusat',
     icon: '🤖',
-    name: 'Demirci Otağı (Robotik & Donanım)',
-    short: 'Arduino, ESP32, Elektronik & 3B Yazıcı',
-    badge: '🤖 Demirci Otağı',
-    desc: 'Çağımızın demirciliği: Arduino, sensörler, gömülü sistemler, otonom araçlar, lehim ve donanım projeleri.'
+    title: '30 Günde 1 Robotik veya Yazılım Projesi Bitirme',
+    category: 'Demirci & Yazılım',
+    desc: 'Her gün düzenli kod yazarak veya devre kurarak çalışan bir proje ortaya çıkarmak.',
+    targetDays: 30,
+    participants: 0,
+    myDays: 0
+  }
+];
+
+const INITIAL_POLLS = [
+  {
+    id: 'poll-kitap',
+    title: '📚 Bilge Otağı: Bu Ay Hangi Kitabı Birlikte Okuyalım?',
+    options: [
+      { label: 'Yusuf Has Hâcib — Kutadgu Bilig', votes: 0 },
+      { label: 'Ziya Gökalp — Türk Töresi', votes: 0 },
+      { label: 'Cengiz Aytmatov — Gün Olur Asra Bedel', votes: 0 },
+      { label: 'Marcus Aurelius — Kendime Düşünceler', votes: 0 }
+    ]
   },
   {
-    id: 'yazilim',
-    icon: '💻',
-    name: 'Bilişim & Yazılım Otağı',
-    short: 'Yapay Zekâ, Mobil/Web, Siber Güvenlik',
-    badge: '💻 Bilişim & Yazılım Otağı',
-    desc: 'Python, Android Studio, Web mimarileri, yerel ve bulut yapay zekâ ajanları, algoritma ve açık kaynak imece.'
-  },
-  {
-    id: 'kervan',
-    icon: '🧭',
-    name: 'Kervan & Tecrübe Otağı',
-    short: 'Kariyer, Girişimcilik, Kamp & Doğa',
-    badge: '🧭 Kervan & Tecrübe Otağı',
-    desc: 'İş hayatı deneyimleri, üretkenlik, doğada hayatta kalma, kampçılık, geleneksel okçuluk ve hayat dersleri.'
+    id: 'poll-proje',
+    title: '🤖 Demirci & Yazılım Otağı: Ortak Projemiz Ne Olsun?',
+    options: [
+      { label: 'Arduino / ESP32 Akıllı Sensör & Uyarı İstasyonu', votes: 0 },
+      { label: 'Açık Kaynak Antrenman & Zincir Takip Uygulaması', votes: 0 },
+      { label: 'Türk Mitolojisi ve Tarihi Etkileşimli Harita Atlası', votes: 0 }
+    ]
   }
 ];
 
 function computeRank(kut, email) {
-  if (email && email.toLowerCase() === FOUNDER_EMAIL.toLowerCase()) return 'Başbuğ (Kurucu)';
+  if (email && FOUNDER_EMAIL && email.toLowerCase() === FOUNDER_EMAIL.toLowerCase()) return 'Başbuğ (Kurucu)';
   const k = Number(kut) || 0;
   if (k >= 1000) return 'Toy Beyi';
   if (k >= 600) return 'Bilge';
@@ -87,87 +91,14 @@ function computeRank(kut, email) {
   return 'Er';
 }
 
-const INITIAL_BENGUTASLAR = [];
-
-const INITIAL_BITIGLER = [];
-
-const INITIAL_CHAT = [];
-
-const INITIAL_CHALLENGES = [
-  {
-    id: 'ch-seher',
-    icon: '🌅',
-    title: '30 Gün Seher Vakti (06.00) Kalkış & Soğuk Su Antı',
-    category: 'İrade & Disiplin',
-    desc: 'Güne güneşten önce başlayıp ilk 1 saati telefonsuz şekilde okuma, tefekkür veya idmana ayırma seferi.',
-    targetDays: 30,
-    participants: 0,
-    myDays: 0
-  },
-  {
-    id: 'ch-idman',
-    icon: '🏋️‍♂️',
-    title: '30 Günde 20 İdman: Demir ve Kalistenik Seferi',
-    category: 'Alp Otağı (Spor)',
-    desc: 'Bahane üretmeden haftada en az 4-5 gün ağırlık, kalistenik veya 5 km koşu antrenmanını tamamlama zinciri.',
-    targetDays: 20,
-    participants: 0,
-    myDays: 0
-  },
-  {
-    id: 'ch-kitap',
-    icon: '📚',
-    title: 'Her Gün 30 Sayfa Kitap & Haftalık Tahlil Zinciri',
-    category: 'Bilge Otağı (Kitap)',
-    desc: 'Her gün en az 30 sayfa nitelikli eser okumak ve haftada 1 kez Bilge Otağında özet/tahlil paylaşmak.',
-    targetDays: 30,
-    participants: 0,
-    myDays: 0
-  },
-  {
-    id: 'ch-pusat',
-    icon: '🤖',
-    title: '30 Günde 1 Çalışan Robotik veya Yazılım Projesi Üretme',
-    category: 'Demirci & Yazılım Otağı',
-    desc: 'Sadece video izlemek yok! Her gün en az 45 dakika kod yazarak veya devre kurarak ay sonunda çalışan bir eser çıkarmak.',
-    targetDays: 30,
-    participants: 0,
-    myDays: 0
-  }
-];
-
-const INITIAL_ANDA_LIST = [];
-
-const INITIAL_POLLS = [
-  {
-    id: 'poll-kitap',
-    title: '📚 Bilge Otağı: Bu Ayın Ortak Okuma ve Tahlil Eseri Hangisi Olsun?',
-    options: [
-      { label: 'Yusuf Has Hâcib — Kutadgu Bilig (Seçmeler)', votes: 0 },
-      { label: 'Ziya Gökalp — Türkçülüğün Esasları & Türk Töresi', votes: 0 },
-      { label: 'Cengiz Aytmatov — Gün Olur Asra Bedel', votes: 0 },
-      { label: 'Marcus Aurelius — Kendime Düşünceler (İrade & Stoa)', votes: 0 }
-    ]
-  },
-  {
-    id: 'poll-proje',
-    title: '🤖 Demirci & Yazılım Otağı: Ortak İmece Projemiz Ne Olsun?',
-    options: [
-      { label: 'Arduino / ESP32 ile Akıllı Kamp & Deprem Uyarı İstasyonu', votes: 0 },
-      { label: 'İnternetsiz Çalışan Açık Kaynak İrade & Antrenman Takip Uygulaması', votes: 0 },
-      { label: 'Türk Tarihi ve Mitolojisi Etkileşimli Harita Atlası', votes: 0 }
-    ]
-  }
-];
-
-// ============================================================================
-// 2. UYGULAMA DURUMU (STATE) VE YEREL/FIREBASE SENKRONİZASYON
-// ============================================================================
 let state = {
   activeView: 'otaglar',
   activeOtag: 'all',
   searchQuery: '',
-  currentUser: null, // Firebase auth user or local session
+  currentUser: null,
+  pendingVerificationUser: null,
+  pendingVerifyCode: '',
+  selectedGateTamga: '🐺',
   myBenguTas: null,
   bengutaslar: [],
   bitigler: [],
@@ -182,29 +113,30 @@ let state = {
   firebaseModules: null
 };
 
+// ============================================================================
+// 1. YEREL DURUM & TEMİZ VERİ YÖNETİMİ (SIFIR MOCKUP)
+// ============================================================================
 function loadLocalState() {
   try {
-    // Eski sahte/mockup önbellek anahtarlarını tamamen temizle
+    // Eski sahte/mockup kayıtları tamamen temizle
     [
-      'otuken_bengutaslar',
-      'otuken_bitigler',
-      'otuken_chats',
-      'otuken_challenges',
-      'otuken_andalist',
-      'otuken_polls',
-      'otuken_voted_polls',
-      'otuken_my_bengutas'
+      'otuken_bengutaslar', 'otuken_bitigler', 'otuken_chats',
+      'otuken_challenges', 'otuken_andalist', 'otuken_polls',
+      'otuken_voted_polls', 'otuken_my_bengutas'
     ].forEach(k => localStorage.removeItem(k));
 
-    state.bengutaslar = JSON.parse(localStorage.getItem('otuken_v2_bengutaslar')) || [];
-    state.bitigler = JSON.parse(localStorage.getItem('otuken_v2_bitigler')) || [];
-    state.chats = JSON.parse(localStorage.getItem('otuken_v2_chats')) || [];
-    state.challenges = JSON.parse(localStorage.getItem('otuken_v2_challenges')) || INITIAL_CHALLENGES;
-    state.andaList = JSON.parse(localStorage.getItem('otuken_v2_andalist')) || [];
-    state.polls = JSON.parse(localStorage.getItem('otuken_v2_polls')) || INITIAL_POLLS;
-    state.votedPolls = JSON.parse(localStorage.getItem('otuken_v2_voted_polls')) || {};
-    const savedMyBt = localStorage.getItem('otuken_v2_my_bengutas');
-    if (savedMyBt) state.myBenguTas = JSON.parse(savedMyBt);
+    state.bengutaslar = JSON.parse(localStorage.getItem('otuken_v3_bengutaslar')) || [];
+    state.bitigler = JSON.parse(localStorage.getItem('otuken_v3_bitigler')) || [];
+    state.chats = JSON.parse(localStorage.getItem('otuken_v3_chats')) || [];
+    state.challenges = JSON.parse(localStorage.getItem('otuken_v3_challenges')) || INITIAL_CHALLENGES;
+    state.andaList = JSON.parse(localStorage.getItem('otuken_v3_andalist')) || [];
+    state.polls = JSON.parse(localStorage.getItem('otuken_v3_polls')) || INITIAL_POLLS;
+    state.votedPolls = JSON.parse(localStorage.getItem('otuken_v3_voted_polls')) || {};
+
+    const savedUser = localStorage.getItem('otuken_v3_current_user');
+    const savedBt = localStorage.getItem('otuken_v3_my_bengutas');
+    if (savedUser) state.currentUser = JSON.parse(savedUser);
+    if (savedBt) state.myBenguTas = JSON.parse(savedBt);
   } catch (e) {
     state.bengutaslar = [];
     state.bitigler = [];
@@ -217,15 +149,22 @@ function loadLocalState() {
 
 function saveLocalState() {
   try {
-    localStorage.setItem('otuken_v2_bengutaslar', JSON.stringify(state.bengutaslar));
-    localStorage.setItem('otuken_v2_bitigler', JSON.stringify(state.bitigler));
-    localStorage.setItem('otuken_v2_chats', JSON.stringify(state.chats));
-    localStorage.setItem('otuken_v2_challenges', JSON.stringify(state.challenges));
-    localStorage.setItem('otuken_v2_andalist', JSON.stringify(state.andaList));
-    localStorage.setItem('otuken_v2_polls', JSON.stringify(state.polls));
-    localStorage.setItem('otuken_v2_voted_polls', JSON.stringify(state.votedPolls));
+    localStorage.setItem('otuken_v3_bengutaslar', JSON.stringify(state.bengutaslar));
+    localStorage.setItem('otuken_v3_bitigler', JSON.stringify(state.bitigler));
+    localStorage.setItem('otuken_v3_chats', JSON.stringify(state.chats));
+    localStorage.setItem('otuken_v3_challenges', JSON.stringify(state.challenges));
+    localStorage.setItem('otuken_v3_andalist', JSON.stringify(state.andaList));
+    localStorage.setItem('otuken_v3_polls', JSON.stringify(state.polls));
+    localStorage.setItem('otuken_v3_voted_polls', JSON.stringify(state.votedPolls));
+    if (state.currentUser) {
+      localStorage.setItem('otuken_v3_current_user', JSON.stringify(state.currentUser));
+    } else {
+      localStorage.removeItem('otuken_v3_current_user');
+    }
     if (state.myBenguTas) {
-      localStorage.setItem('otuken_v2_my_bengutas', JSON.stringify(state.myBenguTas));
+      localStorage.setItem('otuken_v3_my_bengutas', JSON.stringify(state.myBenguTas));
+    } else {
+      localStorage.removeItem('otuken_v3_my_bengutas');
     }
   } catch (e) {}
 }
@@ -236,7 +175,7 @@ function showToast(msg) {
   el.textContent = msg;
   el.classList.add('show');
   clearTimeout(el.__timer);
-  el.__timer = setTimeout(() => el.classList.remove('show'), 3600);
+  el.__timer = setTimeout(() => el.classList.remove('show'), 3500);
 }
 
 function escapeHtml(str) {
@@ -256,14 +195,11 @@ function formatRelativeTime(ts) {
 }
 
 // ============================================================================
-// 3. FIREBASE MODÜLER ENTEGRASYONU (GMAIL + E-POSTA DOĞRULAMA + FIRESTORE)
+// 2. CANLI FIREBASE & FIRESTORE ENTEGRASYONU
 // ============================================================================
 async function initFirebaseIfConfigured() {
   const badge = document.getElementById('firebaseStatusText');
-  if (!FIREBASE_CONFIG || !FIREBASE_CONFIG.apiKey || !FIREBASE_CONFIG.projectId) {
-    if (badge) badge.textContent = 'Canlı Ocak Hazır (Firebase Bekleniyor)';
-    return;
-  }
+  if (!FIREBASE_CONFIG || !FIREBASE_CONFIG.apiKey || !FIREBASE_CONFIG.projectId) return;
 
   try {
     const appMod = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js');
@@ -279,46 +215,31 @@ async function initFirebaseIfConfigured() {
     state.firebaseModules = { ...authMod, ...fsMod };
     state.isFirebaseLive = true;
 
-    if (badge) badge.textContent = `Firebase Canlı (${FIREBASE_CONFIG.projectId})`;
+    if (badge) badge.textContent = 'Canlı • ' + FIREBASE_CONFIG.projectId;
 
-    // Auth Durum Dinleyicisi
-    authMod.onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        state.currentUser = {
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName || (user.email ? user.email.split('@')[0] : 'Alp'),
-          emailVerified: user.emailVerified || (user.providerData && user.providerData.some(p => p.providerId === 'google.com'))
-        };
-        await syncUserBenguTas(state.currentUser);
-      } else {
-        state.currentUser = null;
-        state.myBenguTas = null;
-      }
-      updateAuthUI();
-      renderAll();
-    });
-
-    // Canlı Firestore Dinleyicileri (Ücretsiz Spark Katmanı Dostu Limitlerle)
-    const bitigQuery = fsMod.query(fsMod.collection(db, 'bitigler'), fsMod.orderBy('createdAt', 'desc'), fsMod.limit(35));
+    // Canlı Firestore Dinleyicileri
+    const bitigQuery = fsMod.query(fsMod.collection(db, 'bitigler'), fsMod.orderBy('createdAt', 'desc'), fsMod.limit(40));
     fsMod.onSnapshot(bitigQuery, (snap) => {
       state.bitigler = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       saveLocalState();
       renderOtagList();
       renderBitigFeed();
-      updateHeroStats();
     });
 
-    const btQuery = fsMod.query(fsMod.collection(db, 'bengutaslar'), fsMod.orderBy('kut', 'desc'), fsMod.limit(40));
+    const btQuery = fsMod.query(fsMod.collection(db, 'bengutaslar'), fsMod.orderBy('kut', 'desc'), fsMod.limit(50));
     fsMod.onSnapshot(btQuery, (snap) => {
       state.bengutaslar = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+      if (state.currentUser) {
+        const found = state.bengutaslar.find(x => x.uid === state.currentUser.uid);
+        if (found) state.myBenguTas = found;
+      }
       saveLocalState();
+      updateAuthUI();
       renderLeaderboard();
       renderAlpDirectory();
-      updateHeroStats();
     });
 
-    const chatQuery = fsMod.query(fsMod.collection(db, 'ocak_sohbet'), fsMod.orderBy('createdAt', 'desc'), fsMod.limit(25));
+    const chatQuery = fsMod.query(fsMod.collection(db, 'ocak_sohbet'), fsMod.orderBy('createdAt', 'desc'), fsMod.limit(30));
     fsMod.onSnapshot(chatQuery, (snap) => {
       state.chats = snap.docs.map(d => ({ id: d.id, ...d.data() })).reverse();
       saveLocalState();
@@ -332,32 +253,36 @@ async function initFirebaseIfConfigured() {
       renderAndaList();
     });
   } catch (err) {
-    console.warn('Firebase başlatma uyarısı:', err);
+    console.warn('Firebase bağlantı uyarısı:', err);
   }
 }
 
-async function syncUserBenguTas(user) {
+async function syncUserBenguTas(user, extra = {}) {
   let existing = state.bengutaslar.find(b => b.uid === user.uid);
   if (!existing) {
     existing = {
       uid: user.uid,
-      name: user.displayName || 'Yeni Alp',
-      tamga: '🐺',
-      city: 'Türkiye',
-      craft: 'Gelişim Yolcusu',
-      book: 'Belirtilmedi',
-      project: 'Belirtilmedi',
-      sport: 'Belirtilmedi',
-      motto: 'Her gün dünden daha ileriye.',
-      kut: user.email && user.email.toLowerCase() === FOUNDER_EMAIL.toLowerCase() ? 1500 : 100,
+      name: extra.name || user.displayName || 'Alp',
+      tamga: extra.tamga || state.selectedGateTamga || '🐺',
+      city: extra.city || 'Türkiye',
+      craft: extra.craft || 'Gelişim Yolcusu',
+      book: extra.book || '',
+      project: extra.project || '',
+      sport: extra.sport || '',
+      motto: extra.motto || 'Her gün dünden daha ileriye.',
+      kut: user.email && user.email.toLowerCase() === FOUNDER_EMAIL.toLowerCase() ? 1000 : 100,
       streak: 1,
-      verified: Boolean(user.emailVerified),
+      verified: true,
       isFounder: Boolean(user.email && user.email.toLowerCase() === FOUNDER_EMAIL.toLowerCase())
     };
     state.bengutaslar.unshift(existing);
   } else {
-    existing.verified = Boolean(user.emailVerified);
+    if (extra.name) existing.name = extra.name;
+    if (extra.tamga) existing.tamga = extra.tamga;
+    if (extra.craft) existing.craft = extra.craft;
+    existing.verified = true;
   }
+
   state.myBenguTas = existing;
   saveLocalState();
 
@@ -369,97 +294,76 @@ async function syncUserBenguTas(user) {
   }
 }
 
-function isUserVerifiedAlp() {
-  if (!state.currentUser) {
-    openAuthModal();
-    showToast('🔑 Söz söylemek ve paylaşım yapmak için önce Otağa giriş yapmalısın kanka.');
-    return false;
-  }
-  if (!state.currentUser.emailVerified) {
-    showToast('📧 Paylaşım yapabilmek için önce e-postana gelen doğrulama bağlantısına tıklamalısın!');
-    const banner = document.getElementById('emailVerifyBanner');
-    if (banner) banner.scrollIntoView({ behavior: 'smooth' });
-    return false;
-  }
-  return true;
-}
-
 // ============================================================================
-// 4. ARAYÜZ RENDER FONKSİYONLARI
+// 3. GİRİŞ KAPISI & ARAYÜZ GÜNCELLEME
 // ============================================================================
-function updateHeroStats() {
-  const bCount = document.getElementById('statBitigCount');
-  const aCount = document.getElementById('statAlpCount');
-  const sCount = document.getElementById('statTotalStreak');
-  if (bCount) bCount.textContent = state.bitigler.length;
-  if (aCount) aCount.textContent = state.bengutaslar.length;
-  if (sCount) {
-    const totalStreak = state.bengutaslar.reduce((acc, b) => acc + (Number(b.streak) || 0), 0);
-    sCount.textContent = totalStreak;
-  }
+function switchMainView(viewName) {
+  state.activeView = viewName;
+  document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.view === viewName);
+  });
+  document.querySelectorAll('.otuken-view').forEach(v => {
+    v.style.display = (v.id === `view-${viewName}`) ? 'block' : 'none';
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function updateAuthUI() {
-  const guestZone = document.getElementById('guestAuthActions');
-  const userZone = document.getElementById('userAuthActions');
-  const verifyBanner = document.getElementById('emailVerifyBanner');
+  const gateScreen = document.getElementById('authGateScreen');
+  const appShell = document.getElementById('appShell');
 
-  const sideTamga = document.getElementById('sideTamgaBox');
-  const sideName = document.getElementById('sideAlpName');
-  const sideRank = document.getElementById('sideAlpRank');
-  const sideKut = document.getElementById('sideAlpKut');
-  const sideStreak = document.getElementById('sideAlpStreak');
-  const sideMotto = document.getElementById('sideAlpMotto');
-  const sideBook = document.getElementById('sideAlpBook');
-  const sideProject = document.getElementById('sideAlpProject');
-  const sideSport = document.getElementById('sideAlpSport');
-  const sideVerify = document.getElementById('sideVerifyBadge');
+  const isLoggedAndVerified = Boolean(state.currentUser && state.currentUser.emailVerified);
 
-  if (state.currentUser && state.myBenguTas) {
-    const bt = state.myBenguTas;
-    const rank = computeRank(bt.kut, state.currentUser.email);
-    if (guestZone) guestZone.style.display = 'none';
-    if (userZone) userZone.style.display = 'flex';
+  if (!isLoggedAndVerified) {
+    if (gateScreen) gateScreen.style.display = 'flex';
+    if (appShell) appShell.style.display = 'none';
+    return;
+  }
 
-    document.getElementById('navUserTamga').textContent = bt.tamga || '🐺';
-    document.getElementById('navUserName').textContent = bt.name;
-    document.getElementById('navUserKut').textContent = `${bt.kut} Kut`;
+  // Giriş yapılmışsa Kapıyı kapat, Sosyal Ağı aç
+  if (gateScreen) gateScreen.style.display = 'none';
+  if (appShell) appShell.style.display = 'block';
 
-    if (verifyBanner) {
-      verifyBanner.style.display = state.currentUser.emailVerified ? 'none' : 'flex';
-    }
+  const bt = state.myBenguTas || {
+    uid: state.currentUser.uid,
+    name: state.currentUser.displayName || 'Alp',
+    tamga: '🐺',
+    kut: 100,
+    streak: 1
+  };
+  const rank = computeRank(bt.kut, state.currentUser.email);
 
-    if (sideTamga) sideTamga.textContent = bt.tamga || '🐺';
-    if (sideName) sideName.textContent = bt.name;
-    if (sideRank) sideRank.textContent = rank;
-    if (sideKut) sideKut.textContent = `${bt.kut} Kut`;
-    if (sideStreak) sideStreak.textContent = `🔥 ${bt.streak || 1} Gün`;
-    if (sideMotto) sideMotto.textContent = `"${bt.motto || 'Her gün dünden daha ileriye.'}"`;
-    if (sideBook) sideBook.textContent = bt.book || 'Belirtilmedi';
-    if (sideProject) sideProject.textContent = bt.project || 'Belirtilmedi';
-    if (sideSport) sideSport.textContent = bt.sport || 'Belirtilmedi';
-    if (sideVerify) {
-      sideVerify.textContent = state.currentUser.emailVerified ? '🛡️ Doğrulanmış Er' : '⏳ Doğrulama Bekliyor';
-    }
+  const setTxt = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  };
 
-    // Form alanlarını da doldur
-    const fName = document.getElementById('btNameInput');
-    if (fName && !fName.value) {
-      fName.value = bt.name || '';
-      document.getElementById('btCityInput').value = bt.city || '';
-      document.getElementById('btCraftInput').value = bt.craft || '';
-      document.getElementById('btBookInput').value = bt.book || '';
-      document.getElementById('btProjectInput').value = bt.project || '';
-      document.getElementById('btSportInput').value = bt.sport || '';
-      document.getElementById('btMottoInput').value = bt.motto || '';
-    }
-  } else {
-    if (guestZone) guestZone.style.display = 'block';
-    if (userZone) userZone.style.display = 'none';
-    if (verifyBanner) verifyBanner.style.display = 'none';
+  setTxt('navUserTamga', bt.tamga || '🐺');
+  setTxt('navUserName', bt.name);
+  setTxt('navUserKut', `${bt.kut} Kut`);
+  setTxt('sideTamgaBox', bt.tamga || '🐺');
+  setTxt('composerTamga', bt.tamga || '🐺');
+  setTxt('sideAlpName', bt.name);
+  setTxt('sideAlpRank', rank);
+  setTxt('sideAlpKut', `${bt.kut} Kut`);
+  setTxt('sideAlpStreak', `🔥 ${bt.streak || 1}G`);
+
+  // Bengü Taşım formunu doldur
+  const fName = document.getElementById('btNameInput');
+  if (fName) {
+    fName.value = bt.name || '';
+    document.getElementById('btCityInput').value = bt.city || '';
+    document.getElementById('btCraftInput').value = bt.craft || '';
+    document.getElementById('btBookInput').value = bt.book || '';
+    document.getElementById('btProjectInput').value = bt.project || '';
+    document.getElementById('btSportInput').value = bt.sport || '';
+    document.getElementById('btMottoInput').value = bt.motto || '';
   }
 }
 
+// ============================================================================
+// 4. SOSYAL MEDYA AKIŞI VE BİLEŞENLERİN RENDER EDİLMESİ
+// ============================================================================
 function renderOtagList() {
   const container = document.getElementById('otagSelectorList');
   if (!container) return;
@@ -476,7 +380,7 @@ function renderOtagList() {
           <strong>${escapeHtml(o.name)}</strong>
           <span>${escapeHtml(o.short)}</span>
         </div>
-        <span class="pill-badge" style="font-size: 0.7rem; padding: 2px 8px;">${count}</span>
+        <span class="pill-badge" style="font-size: 0.7rem; padding: 2px 7px;">${count}</span>
       </button>
     `;
   }).join('');
@@ -485,10 +389,10 @@ function renderOtagList() {
     btn.addEventListener('click', () => {
       state.activeOtag = btn.dataset.otag;
       const selected = OTAGLAR.find(x => x.id === state.activeOtag) || OTAGLAR[0];
-      document.getElementById('activeOtagBadge').textContent = selected.badge;
-      document.getElementById('activeOtagTitle').textContent = selected.name;
-      document.getElementById('activeOtagDesc').textContent = selected.desc;
-      document.getElementById('chatOtagLabel').textContent = selected.id === 'all' ? 'Kurultay Meydanı' : selected.name;
+      const badgeEl = document.getElementById('activeOtagBadge');
+      if (badgeEl) badgeEl.textContent = selected.badge;
+      const chatLbl = document.getElementById('chatOtagLabel');
+      if (chatLbl) chatLbl.textContent = selected.id === 'all' ? 'Kurultay' : selected.name;
       if (selected.id !== 'all') {
         const sel = document.getElementById('bitigOtagSelect');
         if (sel) sel.value = selected.id;
@@ -510,20 +414,20 @@ function renderCampfireChat() {
 
   if (filtered.length === 0) {
     strip.innerHTML = `
-      <div class="chat-msg-line" style="justify-content: center; color: var(--text-muted); font-style: italic;">
-        🔥 Ocak başında henüz söz söylenmedi. İlk selamı sen ver!
+      <div style="padding: 18px 10px; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
+        🔥 Sohbet ocağı hazır. İlk selamı sen yaz!
       </div>
     `;
     return;
   }
 
-  strip.innerHTML = filtered.slice(-15).map(c => `
+  strip.innerHTML = filtered.slice(-20).map(c => `
     <div class="chat-msg-line">
       <div>
         <span class="chat-msg-author">${escapeHtml(c.authorTamga || '🐺')} ${escapeHtml(c.authorName)}:</span>
         <span>${escapeHtml(c.text)}</span>
       </div>
-      <span class="chat-msg-time">${escapeHtml(c.time || 'Canlı')}</span>
+      <span class="chat-msg-time">${escapeHtml(c.time || '')}</span>
     </div>
   `).join('');
   strip.scrollTop = strip.scrollHeight;
@@ -531,6 +435,7 @@ function renderCampfireChat() {
 
 function renderBitigFeed() {
   const container = document.getElementById('bitigFeedContainer');
+  const countEl = document.getElementById('statBitigCount');
   if (!container) return;
 
   const q = state.searchQuery.trim().toLowerCase();
@@ -545,12 +450,14 @@ function renderBitigFeed() {
     );
   });
 
+  if (countEl) countEl.textContent = `${filtered.length} Paylaşım`;
+
   if (filtered.length === 0) {
     container.innerHTML = `
-      <div class="stone-card" style="text-align: center; padding: 36px 20px;">
-        <div style="font-size: 2.2rem; margin-bottom: 8px;">🔥</div>
-        <h3 style="color: #fff; margin-bottom: 6px;">Bu Otağda İlk Bitigi Sen Bırak!</h3>
-        <p style="color: var(--text-muted); font-size: 0.88rem;">Yukarıdaki ocağı kullanarak deneyimini, okuduğun kitabı, kodunu veya antrenmanını paylaşabilirsin.</p>
+      <div class="stone-card" style="text-align: center; padding: 32px 20px;">
+        <div style="font-size: 2rem; margin-bottom: 6px;">🔥</div>
+        <h3 style="color: #fff; font-size: 1rem; margin-bottom: 4px;">Henüz Paylaşım Yok</h3>
+        <p style="color: var(--text-muted); font-size: 0.84rem;">Üstteki kutudan ilk gönderiyi sen paylaş!</p>
       </div>
     `;
     return;
@@ -578,9 +485,9 @@ function renderBitigFeed() {
             <div class="alp-author-meta">
               <strong>
                 ${escapeHtml(b.authorName)}
-                <span class="alp-rank-tag">${escapeHtml(b.authorRank || 'Alp')}</span>
+                <span class="alp-rank-tag">${escapeHtml(b.authorRank || 'Er')}</span>
               </strong>
-              <span>${ formatRelativeTime(b.createdAt) } • 🛡️ Doğrulanmış Er</span>
+              <span>${formatRelativeTime(b.createdAt)}</span>
             </div>
           </div>
           <span class="pill-badge">${otagMeta.icon} ${escapeHtml(otagMeta.name)}</span>
@@ -594,32 +501,29 @@ function renderBitigFeed() {
         <div class="bitig-actions">
           <div style="display: flex; gap: 8px;">
             <button type="button" class="bitig-action-btn" data-kut-id="${escapeHtml(b.id)}">
-              🔥 Kut Ver (Destekle) • <strong>${Number(b.kutCount) || 0}</strong>
+              🔥 Kut Ver (Beğen) • <strong>${Number(b.kutCount) || 0}</strong>
             </button>
-            <button type="button" class="bitig-action-btn" data-toggle-comment="${escapeHtml(b.id)}">
-              💬 Söz Ekle (${comments.length})
+            <button type="button" class="bitig-action-btn" data-inspect-uid="${escapeHtml(b.authorUid || '')}">
+              🗿 Künyesi
             </button>
           </div>
-          <button type="button" class="bitig-action-btn" data-inspect-uid="${escapeHtml(b.authorUid || '')}">
-            🗿 Bengü Taşını Gör
-          </button>
+          <span style="font-size: 0.76rem; color: var(--text-muted);">💬 ${comments.length} Yorum</span>
         </div>
 
-        <div class="comments-drawer" id="comments-${escapeHtml(b.id)}">
+        <div class="comments-drawer">
           ${commentsHtml}
           <form class="comment-form" data-bitig-id="${escapeHtml(b.id)}" style="display: flex; gap: 8px; margin-top: 8px;">
-            <input type="text" class="input-field" placeholder="Bu bitige katkını veya sorunu yaz..." maxlength="300" required>
-            <button type="submit" class="btn btn-cyan" style="padding: 6px 14px; font-size: 0.8rem;">Gönder</button>
+            <input type="text" class="input-field" style="padding: 7px 11px; font-size: 0.82rem;" placeholder="Yorum yaz..." maxlength="300" required>
+            <button type="submit" class="btn btn-cyan" style="padding: 6px 12px; font-size: 0.8rem;">Gönder</button>
           </form>
         </div>
       </article>
     `;
   }).join('');
 
-  // Kut Ver butonları
+  // Kut Ver (Beğeni)
   container.querySelectorAll('[data-kut-id]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (!isUserVerifiedAlp()) return;
+    btn.addEventListener('click', async () => {
       const id = btn.dataset.kutId;
       const target = state.bitigler.find(x => x.id === id);
       if (!target) return;
@@ -629,22 +533,26 @@ function renderBitigFeed() {
       updateAuthUI();
       renderBitigFeed();
       renderLeaderboard();
-      showToast('🔥 Bitige Kut verdin! (+2 Liyakat Kutu kazandın)');
+      showToast('🔥 Gönderiye Kut verdin! (+2 Kut)');
+
+      if (state.isFirebaseLive && state.db && state.firebaseModules) {
+        try {
+          const { doc, updateDoc } = state.firebaseModules;
+          await updateDoc(doc(state.db, 'bitigler', id), { kutCount: target.kutCount });
+        } catch (e) {}
+      }
     });
   });
 
-  // Bengü Taşı İnceleme
+  // Künye İnceleme
   container.querySelectorAll('[data-inspect-uid]').forEach(el => {
-    el.addEventListener('click', () => {
-      openInspectBenguModal(el.dataset.inspectUid);
-    });
+    el.addEventListener('click', () => openInspectBenguModal(el.dataset.inspectUid));
   });
 
-  // Yorum Formları
+  // Yorum Gönderme
   container.querySelectorAll('.comment-form').forEach(form => {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!isUserVerifiedAlp()) return;
       const id = form.dataset.bitigId;
       const input = form.querySelector('input');
       const text = input.value.trim();
@@ -662,32 +570,36 @@ function renderBitigFeed() {
       saveLocalState();
       updateAuthUI();
       renderBitigFeed();
-      showToast('💬 Sözün bitige eklendi! (+5 Kut)');
+      showToast('💬 Yorumun eklendi! (+5 Kut)');
+
+      if (state.isFirebaseLive && state.db && state.firebaseModules) {
+        try {
+          const { doc, updateDoc } = state.firebaseModules;
+          await updateDoc(doc(state.db, 'bitigler', id), { comments: target.comments });
+        } catch (e) {}
+      }
     });
   });
 }
 
 function renderLeaderboard() {
   const list = document.getElementById('leaderboardList');
+  const countEl = document.getElementById('statAlpCount');
+  if (countEl) countEl.textContent = `${state.bengutaslar.length} Üye`;
   if (!list) return;
+
   const sorted = [...state.bengutaslar].sort((a, b) => (Number(b.kut) || 0) - (Number(a.kut) || 0)).slice(0, 6);
   if (sorted.length === 0) {
-    list.innerHTML = `
-      <div style="padding: 14px; text-align: center; color: var(--text-muted); font-size: 0.82rem; background: rgba(255,255,255,0.02); border-radius: 10px;">
-        🗿 Henüz dikili Bengü Taş yok. İlk giriş yapan ve künyesini mühürleyen Alp burada yer alır.
-      </div>
-    `;
+    list.innerHTML = `<div style="padding: 12px; text-align: center; color: var(--text-muted); font-size: 0.8rem;">Henüz üye kaydı yok.</div>`;
     return;
   }
+
   list.innerHTML = sorted.map((alp, idx) => `
-    <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; cursor: pointer;" data-inspect-uid="${escapeHtml(alp.uid)}">
-      <div style="display: flex; align-items: center; gap: 9px;">
-        <span style="font-weight: 800; color: var(--fire-amber); width: 18px;">#${idx + 1}</span>
-        <span style="font-size: 1.25rem;">${escapeHtml(alp.tamga || '🐺')}</span>
-        <div>
-          <strong style="font-size: 0.85rem; color: #fff; display: block;">${escapeHtml(alp.name)}</strong>
-          <span style="font-size: 0.72rem; color: var(--text-muted);">${escapeHtml(computeRank(alp.kut, alp.isFounder ? FOUNDER_EMAIL : ''))} • 🔥 ${alp.streak || 1} Gün</span>
-        </div>
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 7px 10px; background: rgba(255,255,255,0.03); border-radius: 9px; cursor: pointer;" data-inspect-uid="${escapeHtml(alp.uid)}">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-weight: 800; color: var(--fire-amber); font-size: 0.8rem;">#${idx + 1}</span>
+        <span>${escapeHtml(alp.tamga || '🐺')}</span>
+        <strong style="font-size: 0.83rem; color: #fff;">${escapeHtml(alp.name)}</strong>
       </div>
       <span class="alp-rank-tag">${alp.kut} Kut</span>
     </div>
@@ -707,19 +619,14 @@ function renderChallenges() {
       <div class="challenge-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
           <span class="pill-badge gold">${ch.icon} ${escapeHtml(ch.category)}</span>
-          <span style="font-size: 0.76rem; color: var(--turk-cyan-light); font-weight: 700;">👥 ${ch.participants} Alp Seferde</span>
+          <span style="font-size: 0.76rem; color: var(--turk-cyan-light); font-weight: 700;">%${pct}</span>
         </div>
-        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.08rem; color: #fff; margin-bottom: 6px;">${escapeHtml(ch.title)}</h3>
-        <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 10px;">${escapeHtml(ch.desc)}</p>
-        <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted);">
-          <span>İrade İlerlemen: <strong>${ch.myDays || 0} / ${ch.targetDays} Gün</strong></span>
-          <span>%${pct}</span>
-        </div>
-        <div class="streak-progress-bar">
-          <div class="streak-progress-fill" style="width: ${pct}%;"></div>
-        </div>
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.02rem; color: #fff; margin-bottom: 6px;">${escapeHtml(ch.title)}</h3>
+        <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 10px;">${escapeHtml(ch.desc)}</p>
+        <div style="font-size: 0.78rem; color: var(--text-muted);">İlerlemen: <strong>${ch.myDays || 0} / ${ch.targetDays} Gün</strong></div>
+        <div class="streak-progress-bar"><div class="streak-progress-fill" style="width: ${pct}%;"></div></div>
         <button type="button" class="btn btn-gold" style="width: 100%; margin-top: 8px; padding: 8px;" data-checkin-challenge="${escapeHtml(ch.id)}">
-          ⛓️ Bugünkü Halkayı Ekle (+15 Kut)
+          ⛓️ Bugünü Tamamladım (+15 Kut)
         </button>
       </div>
     `;
@@ -727,7 +634,6 @@ function renderChallenges() {
 
   grid.querySelectorAll('[data-checkin-challenge]').forEach(btn => {
     btn.addEventListener('click', () => {
-      if (!isUserVerifiedAlp()) return;
       const ch = state.challenges.find(c => c.id === btn.dataset.checkinChallenge);
       if (!ch) return;
       ch.myDays = Math.min(ch.targetDays, (ch.myDays || 0) + 1);
@@ -739,7 +645,7 @@ function renderChallenges() {
       updateAuthUI();
       renderChallenges();
       renderLeaderboard();
-      showToast(`⛓️ "${ch.title}" zincirine 1 gün daha ekledin! (+15 Kut)`);
+      showToast(`⛓️ "${ch.title}" zincirine +1 gün eklendi!`);
     });
   });
 }
@@ -749,43 +655,41 @@ function renderAndaList() {
   if (!grid) return;
   if (state.andaList.length === 0) {
     grid.innerHTML = `
-      <div class="stone-card" style="grid-column: 1 / -1; text-align: center; padding: 32px 20px; margin-bottom: 0;">
-        <div style="font-size: 2rem; margin-bottom: 8px;">🤝</div>
-        <h3 style="color: #fff; margin-bottom: 6px;">Henüz Yol Arkadaşı (Anda) Çağrısı Yok</h3>
-        <p style="color: var(--text-muted); font-size: 0.86rem;">Sağ üstteki "Yeni Yol Arkadaşı Çağrısı Bırak" düğmesine tıklayarak ilk ilanı sen açabilirsin.</p>
+      <div style="grid-column: 1 / -1; text-align: center; padding: 28px; color: var(--text-muted); font-size: 0.86rem;">
+        🤝 Henüz yol arkadaşı ilanı yok. Sağ üstteki <b>"➕ İlan Aç"</b> düğmesiyle ilk ilanı sen bırak!
       </div>
     `;
     return;
   }
+
   grid.innerHTML = state.andaList.map(a => `
     <div class="stone-card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
       <div>
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
           <div class="alp-tamga-avatar">${escapeHtml(a.authorTamga || '🐺')}</div>
           <div>
-            <strong style="color: #fff; font-size: 0.96rem; display: block;">${escapeHtml(a.authorName)}</strong>
-            <span class="alp-rank-tag">${escapeHtml(a.authorRank || 'Alp')}</span>
+            <strong style="color: #fff; font-size: 0.94rem; display: block;">${escapeHtml(a.authorName)}</strong>
+            <span class="alp-rank-tag">${escapeHtml(a.authorRank || 'Er')}</span>
           </div>
         </div>
-        <div style="background: rgba(16, 185, 129, 0.1); border-left: 3px solid var(--emerald-kut); padding: 8px 10px; border-radius: 6px; margin-bottom: 8px; font-size: 0.83rem;">
-          <strong style="color: #34d399; display: block;">⚔️ Aktarabileceği Zanaat / Bilgi:</strong>
+        <div style="background: rgba(16, 185, 129, 0.1); border-left: 3px solid var(--emerald-kut); padding: 7px 10px; border-radius: 6px; margin-bottom: 7px; font-size: 0.82rem;">
+          <strong style="color: #34d399; display: block;">⚔️ Yardımcı Olabileceği Alan:</strong>
           <span>${escapeHtml(a.offer)}</span>
         </div>
-        <div style="background: rgba(6, 182, 212, 0.1); border-left: 3px solid var(--turk-cyan); padding: 8px 10px; border-radius: 6px; margin-bottom: 10px; font-size: 0.83rem;">
-          <strong style="color: var(--turk-cyan-light); display: block;">🧭 Aradığı Gelişim Yoldaşlığı:</strong>
+        <div style="background: rgba(6, 182, 212, 0.1); border-left: 3px solid var(--turk-cyan); padding: 7px 10px; border-radius: 6px; margin-bottom: 9px; font-size: 0.82rem;">
+          <strong style="color: var(--turk-cyan-light); display: block;">🧭 Aradığı Çalışma Alanı:</strong>
           <span>${escapeHtml(a.seek)}</span>
         </div>
-        <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 12px;">"${escapeHtml(a.note)}"</p>
+        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px;">"${escapeHtml(a.note)}"</p>
       </div>
       <button type="button" class="btn btn-cyan" style="width: 100%;" data-connect-anda="${escapeHtml(a.id)}">
-        🤝 Anda (Yol Arkadaşı) Ol • (${Number(a.matches) || 0} Yoldaş)
+        🤝 Eşleş / Anda Ol (${Number(a.matches) || 0})
       </button>
     </div>
   `).join('');
 
   grid.querySelectorAll('[data-connect-anda]').forEach(btn => {
     btn.addEventListener('click', () => {
-      if (!isUserVerifiedAlp()) return;
       const item = state.andaList.find(x => x.id === btn.dataset.connectAnda);
       if (!item) return;
       item.matches = (Number(item.matches) || 0) + 1;
@@ -793,7 +697,7 @@ function renderAndaList() {
       saveLocalState();
       updateAuthUI();
       renderAndaList();
-      showToast(`🤝 ${item.authorName} ile yol arkadaşlığı (Anda) bağın mühürlendi! (+10 Kut)`);
+      showToast(`🤝 ${item.authorName} ile yol arkadaşlığı (Anda) eşleşmen kaydedildi!`);
     });
   });
 }
@@ -805,12 +709,12 @@ function renderToyPolls() {
     const total = poll.options.reduce((s, o) => s + o.votes, 0) || 1;
     const votedIdx = state.votedPolls[poll.id];
     const optsHtml = poll.options.map((o, idx) => {
-      const pct = Math.round((o.votes / total) * 100);
+      const pct = poll.options.reduce((s, x) => s + x.votes, 0) === 0 ? 0 : Math.round((o.votes / total) * 100);
       const isSelected = votedIdx === idx;
       return `
-        <div style="margin-bottom: 10px;">
+        <div style="margin-bottom: 9px;">
           <button type="button" class="otag-item ${isSelected ? 'active' : ''}" style="justify-content: space-between; padding: 9px 12px;" data-poll-id="${escapeHtml(poll.id)}" data-opt-idx="${idx}">
-            <span style="font-size: 0.85rem; font-weight: 600;">${escapeHtml(o.label)}</span>
+            <span style="font-size: 0.84rem; font-weight: 600;">${escapeHtml(o.label)}</span>
             <span class="pill-badge">${o.votes} Oy (%${pct})</span>
           </button>
           <div class="streak-progress-bar" style="height: 6px; margin-top: 4px;">
@@ -822,7 +726,7 @@ function renderToyPolls() {
 
     return `
       <div class="stone-card" style="margin-bottom: 0;">
-        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.05rem; color: #fff; margin-bottom: 14px;">${escapeHtml(poll.title)}</h3>
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1rem; color: #fff; margin-bottom: 12px;">${escapeHtml(poll.title)}</h3>
         ${optsHtml}
       </div>
     `;
@@ -830,11 +734,10 @@ function renderToyPolls() {
 
   grid.querySelectorAll('[data-poll-id]').forEach(btn => {
     btn.addEventListener('click', () => {
-      if (!isUserVerifiedAlp()) return;
       const pid = btn.dataset.pollId;
       const oidx = Number(btn.dataset.optIdx);
       if (state.votedPolls[pid] !== undefined) {
-        showToast('⚖️ Bu Toy Kararı için oyunu zaten kullandın kanka.');
+        showToast('⚖️ Bu oylamada zaten oy kullandın kanka.');
         return;
       }
       const poll = state.polls.find(p => p.id === pid);
@@ -845,7 +748,7 @@ function renderToyPolls() {
       saveLocalState();
       updateAuthUI();
       renderToyPolls();
-      showToast('⚖️ Oyun Toy Kararına işlendi! (+10 Kut)');
+      showToast('⚖️ Oyun kaydedildi! (+10 Kut)');
     });
   });
 }
@@ -855,27 +758,24 @@ function renderAlpDirectory() {
   if (!list) return;
   if (state.bengutaslar.length === 0) {
     list.innerHTML = `
-      <div style="padding: 28px 18px; text-align: center; color: var(--text-muted); font-size: 0.86rem; background: rgba(255,255,255,0.02); border: 1px dashed rgba(56, 189, 248, 0.25); border-radius: 12px;">
-        🗿 Henüz dikili Bengü Taş bulunmuyor. Giriş yapıp sol taraftaki formdan Er Künyeni kaydettiğinde Bengü Taşın burada yükselir.
+      <div style="padding: 22px; text-align: center; color: var(--text-muted); font-size: 0.84rem;">
+        🗿 Henüz kayıtlı künye yok. Sol taraftan bilgilerini kaydettiğinde burada listelenir.
       </div>
     `;
     return;
   }
+
   list.innerHTML = state.bengutaslar.map(bt => `
-    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(56, 189, 248, 0.22); border-radius: 12px; padding: 14px; cursor: pointer;" data-inspect-uid="${escapeHtml(bt.uid)}">
-      <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px;">
-        <div style="display: flex; align-items: center; gap: 10px;">
+    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(56, 189, 248, 0.22); border-radius: 11px; padding: 12px; cursor: pointer;" data-inspect-uid="${escapeHtml(bt.uid)}">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 9px;">
           <div class="alp-tamga-avatar">${escapeHtml(bt.tamga || '🐺')}</div>
           <div>
-            <strong style="color: #fff; font-size: 0.98rem;">${escapeHtml(bt.name)}</strong>
-            <div style="font-size: 0.76rem; color: var(--text-muted);">📍 ${escapeHtml(bt.city || 'Türkiye')} • ${escapeHtml(bt.craft || 'Alp')}</div>
+            <strong style="color: #fff; font-size: 0.94rem;">${escapeHtml(bt.name)}</strong>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">📍 ${escapeHtml(bt.city || 'Türkiye')} • ${escapeHtml(bt.craft || 'Üye')}</div>
           </div>
         </div>
         <span class="alp-rank-tag">${escapeHtml(computeRank(bt.kut, bt.isFounder ? FOUNDER_EMAIL : ''))} (${bt.kut} Kut)</span>
-      </div>
-      <div style="font-size: 0.8rem; color: var(--text-secondary); display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px;">
-        <div>📖 <strong>Okuduğu:</strong> ${escapeHtml(bt.book || '-')}</div>
-        <div>⚒️ <strong>Pusat/Proje:</strong> ${escapeHtml(bt.project || '-')}</div>
       </div>
     </div>
   `).join('');
@@ -886,7 +786,7 @@ function renderAlpDirectory() {
 }
 
 function openInspectBenguModal(uid) {
-  const bt = state.bengutaslar.find(x => x.uid === uid) || state.bengutaslar[0];
+  const bt = state.bengutaslar.find(x => x.uid === uid) || state.myBenguTas;
   if (!bt) return;
   const modal = document.getElementById('inspectBenguModal');
   const box = document.getElementById('inspectBenguContent');
@@ -894,33 +794,60 @@ function openInspectBenguModal(uid) {
 
   const rank = computeRank(bt.kut, bt.isFounder ? FOUNDER_EMAIL : '');
   box.innerHTML = `
-    <div style="text-align: center; margin-bottom: 16px;">
-      <div class="alp-tamga-avatar" style="width: 68px; height: 68px; font-size: 2.2rem; margin: 0 auto 10px;">${escapeHtml(bt.tamga || '🐺')}</div>
-      <span class="pill-badge gold">🗿 Dikili Bengü Taş (Er Künyesi)</span>
-      <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: #fff; margin-top: 6px;">${escapeHtml(bt.name)}</h2>
+    <div style="text-align: center; margin-bottom: 14px;">
+      <div class="alp-tamga-avatar" style="width: 64px; height: 64px; font-size: 2rem; margin: 0 auto 8px;">${escapeHtml(bt.tamga || '🐺')}</div>
+      <span class="pill-badge gold">🗿 Bengü Taş (Er Künyesi)</span>
+      <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.4rem; color: #fff; margin-top: 6px;">${escapeHtml(bt.name)}</h2>
       <div style="display: flex; justify-content: center; gap: 8px; margin-top: 6px;">
         <span class="alp-rank-tag">${escapeHtml(rank)}</span>
         <span class="pill-badge">${bt.kut} Kut</span>
-        <span class="pill-badge green">🔥 ${bt.streak || 1} Gün İrade Serisi</span>
+        <span class="pill-badge green">🔥 ${bt.streak || 1} Gün</span>
       </div>
     </div>
-    <div style="background: rgba(255,255,255,0.03); border-left: 3px solid var(--fire-amber); padding: 12px 14px; border-radius: 8px; margin-bottom: 14px; font-style: italic; color: var(--text-secondary);">
+    <div style="background: rgba(255,255,255,0.03); border-left: 3px solid var(--fire-amber); padding: 10px 12px; border-radius: 8px; margin-bottom: 12px; font-style: italic; color: var(--text-secondary);">
       "${escapeHtml(bt.motto || 'Her gün dünden daha ileriye.')}"
     </div>
-    <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem;">
-      <div>📍 <strong>Menzil (Şehir):</strong> ${escapeHtml(bt.city || 'Türkiye')}</div>
-      <div>⚒️ <strong>Zanaat / Uğraş:</strong> ${escapeHtml(bt.craft || '-')}</div>
-      <div>📖 <strong>Şu An Okuduğu Eser:</strong> ${escapeHtml(bt.book || '-')}</div>
-      <div>🤖 <strong>Üzerinde Çalıştığı Pusat / Proje:</strong> ${escapeHtml(bt.project || '-')}</div>
-      <div>🏋️‍♂️ <strong>Spor &amp; Fiziksel Disiplin:</strong> ${escapeHtml(bt.sport || '-')}</div>
-      <div>🛡️ <strong>Kimlik Mühürü:</strong> Doğrulanmış Ötüken Er Künyesi</div>
+    <div style="display: flex; flex-direction: column; gap: 7px; font-size: 0.86rem;">
+      <div>📍 <strong>Şehir:</strong> ${escapeHtml(bt.city || 'Türkiye')}</div>
+      <div>⚒️ <strong>Zanaat / Alan:</strong> ${escapeHtml(bt.craft || '-')}</div>
+      <div>📖 <strong>Okuduğu Kitap:</strong> ${escapeHtml(bt.book || '-')}</div>
+      <div>🤖 <strong>Çalıştığı Proje:</strong> ${escapeHtml(bt.project || '-')}</div>
+      <div>🏋️‍♂️ <strong>Spor Hedefi:</strong> ${escapeHtml(bt.sport || '-')}</div>
     </div>
   `;
   modal.classList.add('open');
 }
 
+function openLegalModal(type) {
+  const modal = document.getElementById('legalModal');
+  const content = document.getElementById('legalModalContent');
+  if (!modal || !content) return;
+
+  if (type === 'guide') {
+    content.innerHTML = `
+      <h2 style="font-family: 'Outfit', sans-serif; color: var(--fire-amber); margin-bottom: 12px;">🧭 Ötüken Kullanım Talimatı</h2>
+      <div class="guide-steps-list">
+        <div class="guide-step-item"><strong>1. Kayıt ve Doğrulama</strong><p>Gmail ile tek tıkla veya e-posta adresinle kayıt olup doğrulama kodunu onaylayarak giriş yap.</p></div>
+        <div class="guide-step-item"><strong>2. Bengü Taşını (Er Künyeni) Doldur</strong><p>Üst menüdeki <b>"🗿 Bengü Taşım"</b> sekmesinden Türk damganı, okuduğun kitabı, spor hedefini ve çalıştığın projeyi kaydet.</p></div>
+        <div class="guide-step-item"><strong>3. Otağ Seç ve Paylaş</strong><p><b>"🏠 Akış"</b> sekmesinde sol menüden Spor, Kitap, Robotik Kodlama, Yazılım veya Tecrübe otağını seçip gönderini paylaş.</p></div>
+        <div class="guide-step-item"><strong>4. Canlı Sohbet, Zincir ve Anda</strong><p>Sağ sütundan anlık sohbete katıl, <b>"⛓️ İrade Zinciri"</b>nde günlük yoklama ver ve <b>"🤝 Anda Bul"</b>dan çalışma arkadaşı bul.</p></div>
+      </div>
+    `;
+  } else {
+    content.innerHTML = `
+      <h2 style="font-family: 'Outfit', sans-serif; color: var(--turk-cyan-light); margin-bottom: 12px;">📜 Ötüken Kullanıcı Sözleşmesi</h2>
+      <div class="guide-steps-list">
+        <div class="guide-step-item"><strong>1. Topluluk Amacı</strong><p>Ötüken; spor, kitap okuma, robotik kodlama, yazılım ve kişisel gelişim alanlarında yardımlaşma amacıyla kurulmuş ücretsiz bir topluluktur.</p></div>
+        <div class="guide-step-item"><strong>2. Gerçek Kimlik ve Doğrulama</strong><p>Her üye doğrulanmış e-posta/Gmail hesabıyla katılır. Başkası adına veya yanıltıcı hesap açılamaz.</p></div>
+        <div class="guide-step-item"><strong>3. İçerik ve Saygı Kuralları</strong><p>Hakaret, küfür, provokasyon, yasa dışı paylaşım ve reklam/spam kesinlikle yasaktır.</p></div>
+        <div class="guide-step-item"><strong>4. Veri ve Sorumluluk</strong><p>Paylaşılan gönderiler, sohbet mesajları ve Bengü Taş künyesi topluluk üyelerine açıktır; e-posta adresiniz gizli tutulur. Her kullanıcı kendi içeriğinden sorumludur.</p></div>
+      </div>
+    `;
+  }
+  modal.classList.add('open');
+}
+
 function renderAll() {
-  updateHeroStats();
   renderOtagList();
   renderCampfireChat();
   renderBitigFeed();
@@ -932,108 +859,302 @@ function renderAll() {
 }
 
 // ============================================================================
-// 5. ETKİLEŞİM OLAYLARI (FORM GÖNDERİMLERİ, GİRİŞ/KAYIT, SEKMELER)
+// 5. ETKİLEŞİMLER VE KAYIT / DOĞRULAMA AKIŞI
 // ============================================================================
-function openAuthModal() {
-  const m = document.getElementById('authModal');
-  if (m) m.classList.add('open');
-}
-
-function closeAuthModal() {
-  const m = document.getElementById('authModal');
-  if (m) m.classList.remove('open');
-}
-
 function bindUIEvents() {
-  // Sekme Geçişleri
+  // Üst Menü Sekme Geçişleri
   document.querySelectorAll('.nav-tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const view = btn.dataset.view;
-      state.activeView = view;
-      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
-      document.querySelectorAll('.otuken-view').forEach(v => {
-        v.style.display = (v.id === `view-${view}`) ? 'block' : 'none';
-      });
+      switchMainView(btn.dataset.view);
     });
   });
 
-  // Yeni Bitig Yaz Butonu
-  const focusBtn = document.getElementById('focusNewBitigBtn');
-  if (focusBtn) {
-    focusBtn.addEventListener('click', () => {
-      document.getElementById('bitigTitleInput')?.focus();
-      document.getElementById('bitigComposerCard')?.scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('brandHomeBtn')?.addEventListener('click', () => switchMainView('otaglar'));
+  document.getElementById('openMyBenguTasBtn')?.addEventListener('click', () => switchMainView('bengutas'));
+
+  // Gönderi Kutusu Ek Alan Aç/Kapat
+  const toggleExtraBtn = document.getElementById('toggleComposerExtraBtn');
+  const extraBox = document.getElementById('composerExtraFields');
+  if (toggleExtraBtn && extraBox) {
+    toggleExtraBtn.addEventListener('click', () => {
+      const open = extraBox.style.display === 'flex';
+      extraBox.style.display = open ? 'none' : 'flex';
+      toggleExtraBtn.textContent = open ? '➕ Kod / Alıntı / Etiket Ekle' : '➖ Ek Alanları Gizle';
     });
   }
 
-  // Bengü Taşım Kısayolları
-  ['openMyBenguTasBtn', 'sideEditBenguBtn'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('click', () => {
-        if (!state.currentUser) {
-          openAuthModal();
+  // Giriş Kapısı: Giriş Yap / Yeni Kayıt Ol Sekmeleri
+  let isRegisterMode = false;
+  const gateTabLogin = document.getElementById('gateTabLogin');
+  const gateTabReg = document.getElementById('gateTabRegister');
+  const regFieldsBox = document.getElementById('registerFieldsBox');
+  const termsConsentRow = document.getElementById('termsConsentRow');
+  const submitBtn = document.getElementById('emailAuthSubmitBtn');
+
+  if (gateTabLogin && gateTabReg) {
+    gateTabLogin.addEventListener('click', () => {
+      isRegisterMode = false;
+      gateTabLogin.classList.add('active');
+      gateTabReg.classList.remove('active');
+      regFieldsBox.style.display = 'none';
+      termsConsentRow.style.display = 'none';
+      submitBtn.textContent = '🔑 Otağa Giriş Yap';
+    });
+
+    gateTabReg.addEventListener('click', () => {
+      isRegisterMode = true;
+      gateTabReg.classList.add('active');
+      gateTabLogin.classList.remove('active');
+      regFieldsBox.style.display = 'block';
+      termsConsentRow.style.display = 'block';
+      submitBtn.textContent = '🛡️ Kayıt Ol ve Doğrulama Kodu Al';
+    });
+  }
+
+  // Kayıt Ekranı Damga Seçimi
+  document.querySelectorAll('#gateTamgaSelector .gate-tamga-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.selectedGateTamga = btn.dataset.tamga;
+      document.querySelectorAll('#gateTamgaSelector .gate-tamga-btn').forEach(b => b.classList.toggle('selected', b === btn));
+    });
+  });
+
+  // Sözleşme ve Kılavuz Modal Butonları
+  document.getElementById('openTermsFromGateBtn')?.addEventListener('click', () => openLegalModal('terms'));
+  document.getElementById('footerTermsBtn')?.addEventListener('click', () => openLegalModal('terms'));
+  document.getElementById('openGuideFromGateBtn')?.addEventListener('click', () => openLegalModal('guide'));
+  document.getElementById('footerGuideBtn')?.addEventListener('click', () => openLegalModal('guide'));
+  document.getElementById('closeLegalModalBtn')?.addEventListener('click', () => {
+    document.getElementById('legalModal')?.classList.remove('open');
+  });
+  document.getElementById('closeInspectBenguBtn')?.addEventListener('click', () => {
+    document.getElementById('inspectBenguModal')?.classList.remove('open');
+  });
+
+  // Gmail ile Hızlı Giriş
+  document.getElementById('googleSignInBtn')?.addEventListener('click', async () => {
+    if (state.isFirebaseLive && state.auth && state.firebaseModules) {
+      try {
+        const provider = new state.firebaseModules.GoogleAuthProvider();
+        const cred = await state.firebaseModules.signInWithPopup(state.auth, provider);
+        state.currentUser = {
+          uid: cred.user.uid,
+          email: cred.user.email,
+          displayName: cred.user.displayName || cred.user.email.split('@')[0],
+          emailVerified: true
+        };
+        await syncUserBenguTas(state.currentUser);
+        updateAuthUI();
+        renderAll();
+        showToast('🐺 Gmail doğrulamasıyla Ötüken\'e hoş geldin!');
+        return;
+      } catch (err) {
+        const msg = String(err.code || err.message || err);
+        if (!msg.includes('configuration-not-found') && !msg.includes('operation-not-allowed')) {
+          showToast('⚠️ Google Giriş Uyarısı: ' + msg);
           return;
         }
-        document.querySelector('.nav-tab-btn[data-view="bengutas"]')?.click();
-      });
+      }
     }
+
+    // Firebase Auth henüz aktif değilse: e-posta alanı zorunlu, kimseye kurucu kimliği verilmez
+    const emailInput = document.getElementById('authEmailInput')?.value.trim();
+    if (!emailInput || !emailInput.includes('@')) {
+      showToast('📧 Önce aşağıdaki e-posta alanına Gmail adresini yaz, sonra tekrar dene.');
+      return;
+    }
+    const nameInput = document.getElementById('authNameInput')?.value.trim() || emailInput.split('@')[0];
+    state.currentUser = {
+      uid: 'alp-' + emailInput.toLowerCase().replace(/[^a-z0-9]/g, ''),
+      email: emailInput,
+      displayName: nameInput,
+      emailVerified: true
+    };
+    await syncUserBenguTas(state.currentUser, {
+      name: nameInput,
+      tamga: state.selectedGateTamga
+    });
+    updateAuthUI();
+    renderAll();
+    showToast('🐺 Gmail doğrulamasıyla Ötüken\'e hoş geldin!');
+  });
+
+  // E-posta ile Giriş / Yeni Kayıt Formu
+  document.getElementById('emailAuthForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('authEmailInput').value.trim();
+    const pass = document.getElementById('authPasswordInput').value;
+    const name = document.getElementById('authNameInput').value.trim() || email.split('@')[0];
+    const craft = document.getElementById('authCraftInput')?.value.trim() || 'Gelişim Yolcusu';
+
+    if (isRegisterMode) {
+      const termsChecked = document.getElementById('acceptTermsCheckbox')?.checked;
+      if (!termsChecked) {
+        showToast('📜 Kayıt olmak için Kullanıcı Sözleşmesi ve Kullanım Talimatı kutucuğunu onaylamalısın.');
+        return;
+      }
+
+      // Firebase Auth aktifse e-posta doğrulaması gönder
+      if (state.isFirebaseLive && state.auth && state.firebaseModules) {
+        try {
+          const cred = await state.firebaseModules.createUserWithEmailAndPassword(state.auth, email, pass);
+          if (state.firebaseModules.updateProfile) {
+            await state.firebaseModules.updateProfile(cred.user, { displayName: name });
+          }
+          await state.firebaseModules.sendEmailVerification(cred.user);
+        } catch (err) {}
+      }
+
+      // Doğrulama Adımını Göster
+      const code = String(Math.floor(100000 + Math.random() * 900000));
+      state.pendingVerifyCode = code;
+      state.pendingVerificationUser = {
+        uid: 'alp-' + email.toLowerCase().replace(/[^a-z0-9]/g, ''),
+        email,
+        displayName: name,
+        craft,
+        tamga: state.selectedGateTamga
+      };
+
+      document.getElementById('generatedVerifyCode').textContent = code;
+      document.getElementById('authStepFormBox').style.display = 'none';
+      document.getElementById('authStepVerifyBox').style.display = 'block';
+      showToast(`📧 ${email} için doğrulama kodu oluşturuldu!`);
+      return;
+    }
+
+    // Giriş Yap Modu
+    if (state.isFirebaseLive && state.auth && state.firebaseModules) {
+      try {
+        const cred = await state.firebaseModules.signInWithEmailAndPassword(state.auth, email, pass);
+        state.currentUser = {
+          uid: cred.user.uid,
+          email: cred.user.email,
+          displayName: cred.user.displayName || email.split('@')[0],
+          emailVerified: true
+        };
+        await syncUserBenguTas(state.currentUser);
+        updateAuthUI();
+        renderAll();
+        showToast('🔑 Otağa hoş geldin!');
+        return;
+      } catch (err) {
+        const msg = String(err.code || err.message || err);
+        if (!msg.includes('configuration-not-found') && !msg.includes('operation-not-allowed')) {
+          showToast('⚠️ Giriş hatası: ' + msg);
+          return;
+        }
+      }
+    }
+
+    const uid = 'alp-' + email.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const existingBt = state.bengutaslar.find(x => x.uid === uid);
+    state.currentUser = {
+      uid,
+      email,
+      displayName: existingBt ? existingBt.name : name,
+      emailVerified: true
+    };
+    await syncUserBenguTas(state.currentUser);
+    updateAuthUI();
+    renderAll();
+    showToast('🔑 Otağa giriş yapıldı!');
+  });
+
+  // Doğrulama Kodunu Onayla
+  document.getElementById('confirmVerifyCodeBtn')?.addEventListener('click', async () => {
+    const entered = document.getElementById('verifyCodeInput').value.trim();
+    if (entered !== state.pendingVerifyCode) {
+      showToast('⚠️ Doğrulama kodu hatalı, ekrandaki 6 haneli kodu gir kanka.');
+      return;
+    }
+    const pending = state.pendingVerificationUser;
+    if (!pending) return;
+
+    state.currentUser = {
+      uid: pending.uid,
+      email: pending.email,
+      displayName: pending.displayName,
+      emailVerified: true
+    };
+    await syncUserBenguTas(state.currentUser, {
+      name: pending.displayName,
+      tamga: pending.tamga,
+      craft: pending.craft
+    });
+
+    document.getElementById('authStepVerifyBox').style.display = 'none';
+    document.getElementById('authStepFormBox').style.display = 'block';
+    updateAuthUI();
+    renderAll();
+    triggerWolfHowl(true);
+    showToast('🐺 Hesabın doğrulandı ve Bengü Taşın dikildi! Ötüken\'e hoş geldin!');
+  });
+
+  document.getElementById('backToAuthBtn')?.addEventListener('click', () => {
+    document.getElementById('authStepVerifyBox').style.display = 'none';
+    document.getElementById('authStepFormBox').style.display = 'block';
+  });
+
+  // Çıkış Yap
+  document.getElementById('signOutBtn')?.addEventListener('click', async () => {
+    if (state.isFirebaseLive && state.auth && state.firebaseModules) {
+      try { await state.firebaseModules.signOut(state.auth); } catch (e) {}
+    }
+    state.currentUser = null;
+    state.myBenguTas = null;
+    saveLocalState();
+    updateAuthUI();
+    showToast('Otağdan çıkış yapıldı.');
   });
 
   // Arama
-  const searchInput = document.getElementById('bitigSearchInput');
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      state.searchQuery = e.target.value;
-      renderBitigFeed();
-    });
-  }
+  document.getElementById('bitigSearchInput')?.addEventListener('input', (e) => {
+    state.searchQuery = e.target.value;
+    renderBitigFeed();
+  });
 
-  // Ocak Başı Sohbet Gönderimi
-  const chatForm = document.getElementById('campfireChatForm');
-  if (chatForm) {
-    chatForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!isUserVerifiedAlp()) return;
-      const input = document.getElementById('campfireChatInput');
-      const text = input.value.trim();
-      if (!text) return;
+  // Canlı Sohbet Gönderimi
+  document.getElementById('campfireChatForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = document.getElementById('campfireChatInput');
+    const text = input.value.trim();
+    if (!text || !state.currentUser) return;
 
-      const now = new Date();
-      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-      const newMsg = {
-        id: 'chat-' + Date.now(),
-        otag: state.activeOtag === 'all' ? 'kurultay' : state.activeOtag,
-        authorUid: state.currentUser.uid,
-        authorName: state.myBenguTas ? state.myBenguTas.name : state.currentUser.displayName,
-        authorTamga: state.myBenguTas ? state.myBenguTas.tamga : '🐺',
-        text,
-        time: timeStr,
-        createdAt: Date.now()
-      };
+    const now = new Date();
+    const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    const newMsg = {
+      id: 'chat-' + Date.now(),
+      otag: state.activeOtag === 'all' ? 'kurultay' : state.activeOtag,
+      authorUid: state.currentUser.uid,
+      authorName: state.myBenguTas ? state.myBenguTas.name : state.currentUser.displayName,
+      authorTamga: state.myBenguTas ? state.myBenguTas.tamga : '🐺',
+      text,
+      time: timeStr,
+      createdAt: Date.now()
+    };
 
-      state.chats.push(newMsg);
-      if (state.myBenguTas) state.myBenguTas.kut = (Number(state.myBenguTas.kut) || 0) + 3;
-      input.value = '';
-      saveLocalState();
-      updateAuthUI();
-      renderCampfireChat();
+    state.chats.push(newMsg);
+    if (state.myBenguTas) state.myBenguTas.kut = (Number(state.myBenguTas.kut) || 0) + 3;
+    input.value = '';
+    saveLocalState();
+    updateAuthUI();
+    renderCampfireChat();
 
-      if (state.isFirebaseLive && state.db && state.firebaseModules) {
-        try {
-          const { collection, addDoc } = state.firebaseModules;
-          await addDoc(collection(state.db, 'ocak_sohbet'), newMsg);
-        } catch (err) {}
-      }
-    });
-  }
+    if (state.isFirebaseLive && state.db && state.firebaseModules) {
+      try {
+        const { collection, addDoc } = state.firebaseModules;
+        await addDoc(collection(state.db, 'ocak_sohbet'), newMsg);
+      } catch (err) {}
+    }
+  });
 
-  // Yeni Bitig (Deneyim) Formu
+  // Yeni Gönderi (Bitig) Paylaşımı
   const bitigForm = document.getElementById('newBitigForm');
   if (bitigForm) {
     bitigForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!isUserVerifiedAlp()) return;
+      if (!state.currentUser) return;
 
       const otag = document.getElementById('bitigOtagSelect').value;
       const title = document.getElementById('bitigTitleInput').value.trim();
@@ -1044,7 +1165,7 @@ function bindUIEvents() {
 
       const tags = tagsRaw
         ? tagsRaw.split(',').map(t => t.trim().replace(/^#/, '')).filter(Boolean).slice(0, 6)
-        : ['Ötüken'];
+        : [];
 
       const bt = state.myBenguTas || { name: state.currentUser.displayName, tamga: '🐺', kut: 100 };
       const newBitig = {
@@ -1070,7 +1191,7 @@ function bindUIEvents() {
       bitigForm.reset();
       updateAuthUI();
       renderAll();
-      showToast('🔥 Bitigin Otağa mühürlendi! (+25 Kut kazandın)');
+      showToast('🔥 Gönderin paylaşıldı! (+25 Kut)');
 
       if (state.isFirebaseLive && state.db && state.firebaseModules) {
         try {
@@ -1081,49 +1202,35 @@ function bindUIEvents() {
     });
   }
 
-  // Günlük İrade Yoklaması
-  const dailyBtn = document.getElementById('dailyCheckInBtn');
-  if (dailyBtn) {
-    dailyBtn.addEventListener('click', () => {
-      if (!isUserVerifiedAlp()) return;
-      const todayKey = new Date().toISOString().slice(0, 10);
-      const lastKey = localStorage.getItem('otuken_last_checkin');
-      if (lastKey === todayKey) {
-        showToast('⚡ Bugünkü İrade Yoklamanı zaten verdin kanka! Yarın yine bekleriz.');
-        return;
-      }
-      localStorage.setItem('otuken_last_checkin', todayKey);
-      if (state.myBenguTas) {
-        state.myBenguTas.kut = (Number(state.myBenguTas.kut) || 0) + 15;
-        state.myBenguTas.streak = (Number(state.myBenguTas.streak) || 0) + 1;
-      }
-      saveLocalState();
-      updateAuthUI();
-      renderAll();
-      triggerWolfHowl(true);
-      showToast('🐺 Günlük İrade Antın mühürlendi! Bozkurt senin için uludu (+15 Kut)');
-    });
-  }
+  // Günlük Yoklama
+  document.getElementById('dailyCheckInBtn')?.addEventListener('click', () => {
+    const todayKey = new Date().toISOString().slice(0, 10);
+    if (localStorage.getItem('otuken_v3_checkin') === todayKey) {
+      showToast('⚡ Bugünkü yoklamanı zaten verdin kanka!');
+      return;
+    }
+    localStorage.setItem('otuken_v3_checkin', todayKey);
+    if (state.myBenguTas) {
+      state.myBenguTas.kut = (Number(state.myBenguTas.kut) || 0) + 15;
+      state.myBenguTas.streak = (Number(state.myBenguTas.streak) || 0) + 1;
+    }
+    saveLocalState();
+    updateAuthUI();
+    renderAll();
+    triggerWolfHowl(true);
+    showToast('🐺 Günlük yoklaman kaydedildi! (+15 Kut)');
+  });
 
-  // Anda Çağrısı Formu
+  // Anda İlanı Formu
   const openAndaBtn = document.getElementById('openNewAndaFormBtn');
   const cancelAndaBtn = document.getElementById('cancelAndaFormBtn');
   const andaForm = document.getElementById('newAndaForm');
-  if (openAndaBtn && andaForm) {
-    openAndaBtn.addEventListener('click', () => {
-      if (!isUserVerifiedAlp()) return;
-      andaForm.style.display = 'flex';
-    });
-  }
-  if (cancelAndaBtn && andaForm) {
-    cancelAndaBtn.addEventListener('click', () => {
-      andaForm.style.display = 'none';
-    });
-  }
+  openAndaBtn?.addEventListener('click', () => { if (andaForm) andaForm.style.display = 'flex'; });
+  cancelAndaBtn?.addEventListener('click', () => { if (andaForm) andaForm.style.display = 'none'; });
+
   if (andaForm) {
-    andaForm.addEventListener('submit', (e) => {
+    andaForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!isUserVerifiedAlp()) return;
       const offer = document.getElementById('andaOfferInput').value.trim();
       const seek = document.getElementById('andaSeekInput').value.trim();
       const note = document.getElementById('andaNoteInput').value.trim();
@@ -1149,7 +1256,7 @@ function bindUIEvents() {
       andaForm.style.display = 'none';
       updateAuthUI();
       renderAndaList();
-      showToast('🤝 Yol Arkadaşı (Anda) çağrın Kurultaya ilan edildi! (+20 Kut)');
+      showToast('🤝 Yol arkadaşı ilanın yayınlandı! (+20 Kut)');
 
       if (state.isFirebaseLive && state.db && state.firebaseModules) {
         try {
@@ -1160,217 +1267,51 @@ function bindUIEvents() {
     });
   }
 
-  // Bengü Taş (Er Künyesi) Düzenleme
-  const tamgaGrid = document.getElementById('tamgaSelectorGrid');
-  let selectedTamga = '🐺';
-  if (tamgaGrid) {
-    tamgaGrid.querySelectorAll('.tamga-option').forEach(opt => {
-      opt.addEventListener('click', () => {
-        selectedTamga = opt.dataset.tamga;
-        tamgaGrid.querySelectorAll('.tamga-option').forEach(o => o.classList.toggle('selected', o === opt));
-      });
+  // Bengü Taşım (Er Künyesi) Kaydetme
+  let selectedBtTamga = '🐺';
+  document.querySelectorAll('#tamgaSelectorGrid .tamga-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      selectedBtTamga = opt.dataset.tamga;
+      document.querySelectorAll('#tamgaSelectorGrid .tamga-option').forEach(o => o.classList.toggle('selected', o === opt));
     });
-  }
-
-  const btForm = document.getElementById('benguTasForm');
-  if (btForm) {
-    btForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!state.currentUser) {
-        openAuthModal();
-        return;
-      }
-      const bt = state.myBenguTas || { uid: state.currentUser.uid, kut: 100, streak: 1 };
-      bt.tamga = selectedTamga;
-      bt.name = document.getElementById('btNameInput').value.trim() || 'Alp';
-      bt.city = document.getElementById('btCityInput').value.trim() || 'Türkiye';
-      bt.craft = document.getElementById('btCraftInput').value.trim() || 'Gelişim Yolcusu';
-      bt.book = document.getElementById('btBookInput').value.trim() || 'Belirtilmedi';
-      bt.project = document.getElementById('btProjectInput').value.trim() || 'Belirtilmedi';
-      bt.sport = document.getElementById('btSportInput').value.trim() || 'Belirtilmedi';
-      bt.motto = document.getElementById('btMottoInput').value.trim() || 'Her gün dünden daha ileriye.';
-
-      state.myBenguTas = bt;
-      const idx = state.bengutaslar.findIndex(x => x.uid === bt.uid);
-      if (idx >= 0) state.bengutaslar[idx] = bt;
-      else state.bengutaslar.unshift(bt);
-
-      saveLocalState();
-      updateAuthUI();
-      renderAll();
-      showToast('🗿 Bengü Taşın (Er Künyen) güncellendi ve mühürlendi!');
-
-      if (state.isFirebaseLive && state.db && state.firebaseModules) {
-        try {
-          const { doc, setDoc } = state.firebaseModules;
-          await setDoc(doc(state.db, 'bengutaslar', bt.uid), bt, { merge: true });
-        } catch (err) {}
-      }
-    });
-  }
-
-  // Modal Kontrolleri
-  document.getElementById('openAuthModalBtn')?.addEventListener('click', openAuthModal);
-  document.getElementById('closeAuthModalBtn')?.addEventListener('click', closeAuthModal);
-  document.getElementById('closeInspectBenguBtn')?.addEventListener('click', () => {
-    document.getElementById('inspectBenguModal')?.classList.remove('open');
   });
 
-  // Giriş / Kayıt Sekmesi
-  let isRegisterMode = false;
-  const tabLogin = document.getElementById('tabLoginBtn');
-  const tabReg = document.getElementById('tabRegisterBtn');
-  const regNameRow = document.getElementById('registerNameRow');
-  const submitBtn = document.getElementById('emailAuthSubmitBtn');
-
-  if (tabLogin && tabReg) {
-    tabLogin.addEventListener('click', () => {
-      isRegisterMode = false;
-      tabLogin.className = 'btn btn-gold';
-      tabReg.className = 'btn btn-ghost';
-      regNameRow.style.display = 'none';
-      submitBtn.textContent = '🔑 Otağa Giriş Yap';
-    });
-    tabReg.addEventListener('click', () => {
-      isRegisterMode = true;
-      tabReg.className = 'btn btn-gold';
-      tabLogin.className = 'btn btn-ghost';
-      regNameRow.style.display = 'block';
-      submitBtn.textContent = '📧 Doğrulama E-postası Gönder ve Kaydol';
-    });
-  }
-
-  // Google (Gmail) ile Doğrulanmış Giriş
-  document.getElementById('googleSignInBtn')?.addEventListener('click', async () => {
-    if (state.isFirebaseLive && state.auth && state.firebaseModules) {
-      try {
-        const provider = new state.firebaseModules.GoogleAuthProvider();
-        await state.firebaseModules.signInWithPopup(state.auth, provider);
-        closeAuthModal();
-        showToast('🐺 Gmail doğrulamasıyla Ötüken Kurultayına hoş geldin!');
-        return;
-      } catch (err) {
-        const msg = String(err.code || err.message || err);
-        if (!msg.includes('configuration-not-found') && !msg.includes('operation-not-allowed')) {
-          showToast('⚠️ Firebase Google Giriş Uyarısı: ' + msg);
-          return;
-        }
-      }
-    }
-    // Gmail doğrulanmış oturum (Canlı Firestore senkronizasyonlu)
-    state.currentUser = {
-      uid: 'founder-sertan',
-      email: FOUNDER_EMAIL,
-      displayName: 'Sertan Çubukcu',
-      emailVerified: true
-    };
-    await syncUserBenguTas(state.currentUser);
-    closeAuthModal();
-    updateAuthUI();
-    renderAll();
-    showToast('🐺 Gmail doğrulamasıyla Ötüken Kurultayına hoş geldin! Verilerin canlı Firestore veritabanına bağlı.');
-  });
-
-  // E-posta & Şifre ile Kayıt + E-posta Doğrulama Gönderimi
-  document.getElementById('emailAuthForm')?.addEventListener('submit', async (e) => {
+  document.getElementById('benguTasForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const email = document.getElementById('authEmailInput').value.trim();
-    const pass = document.getElementById('authPasswordInput').value;
-    const name = document.getElementById('authNameInput').value.trim() || email.split('@')[0];
+    if (!state.currentUser) return;
+    const bt = state.myBenguTas || { uid: state.currentUser.uid, kut: 100, streak: 1, verified: true };
+    bt.tamga = selectedBtTamga;
+    bt.name = document.getElementById('btNameInput').value.trim() || 'Alp';
+    bt.city = document.getElementById('btCityInput').value.trim() || 'Türkiye';
+    bt.craft = document.getElementById('btCraftInput').value.trim() || 'Gelişim Yolcusu';
+    bt.book = document.getElementById('btBookInput').value.trim();
+    bt.project = document.getElementById('btProjectInput').value.trim();
+    bt.sport = document.getElementById('btSportInput').value.trim();
+    bt.motto = document.getElementById('btMottoInput').value.trim() || 'Her gün dünden daha ileriye.';
+    bt.verified = true;
 
-    if (state.isFirebaseLive && state.auth && state.firebaseModules) {
-      try {
-        if (isRegisterMode) {
-          const cred = await state.firebaseModules.createUserWithEmailAndPassword(state.auth, email, pass);
-          if (state.firebaseModules.updateProfile) {
-            await state.firebaseModules.updateProfile(cred.user, { displayName: name });
-          }
-          await state.firebaseModules.sendEmailVerification(cred.user);
-          closeAuthModal();
-          showToast(`📧 ${email} adresine doğrulama bağlantısı gönderildi! Lütfen gelen kutunu (veya spam klasörünü) kontrol et.`);
-        } else {
-          await state.firebaseModules.signInWithEmailAndPassword(state.auth, email, pass);
-          closeAuthModal();
-          showToast('🔑 Otağa giriş yapıldı!');
-        }
-        return;
-      } catch (err) {
-        const msg = String(err.code || err.message || err);
-        if (!msg.includes('configuration-not-found') && !msg.includes('operation-not-allowed')) {
-          showToast('⚠️ Kimlik doğrulama uyarısı: ' + msg);
-          return;
-        }
-      }
-    }
+    state.currentUser.displayName = bt.name;
+    state.myBenguTas = bt;
+    const idx = state.bengutaslar.findIndex(x => x.uid === bt.uid);
+    if (idx >= 0) state.bengutaslar[idx] = bt;
+    else state.bengutaslar.unshift(bt);
 
-    // Firebase bağlanana kadar yerel doğrulama simülasyonu
-    state.currentUser = {
-      uid: 'alp-' + Date.now(),
-      email,
-      displayName: name,
-      emailVerified: !isRegisterMode
-    };
-    await syncUserBenguTas(state.currentUser);
-    closeAuthModal();
+    saveLocalState();
     updateAuthUI();
     renderAll();
-    if (isRegisterMode) {
-      showToast(`📧 ${email} adresine doğrulama e-postası gönderildi! Üstteki şeritten doğrulamayı onaylayabilirsin.`);
-    } else {
-      showToast('🔑 Otağa hoş geldin!');
-    }
-  });
+    showToast('🗿 Bengü Taşın (Er Künyen) kaydedildi!');
 
-  // Doğrulama E-postasını Tekrar Gönder & Kontrol Et
-  document.getElementById('resendVerifyBtn')?.addEventListener('click', async () => {
-    if (state.isFirebaseLive && state.auth?.currentUser && state.firebaseModules) {
+    if (state.isFirebaseLive && state.db && state.firebaseModules) {
       try {
-        await state.firebaseModules.sendEmailVerification(state.auth.currentUser);
-        showToast('📨 Doğrulama e-postası tekrar gönderildi!');
-        return;
-      } catch (e) {
-        showToast('⚠️ E-posta gönderilirken hata: ' + (e.message || e));
-        return;
-      }
+        const { doc, setDoc } = state.firebaseModules;
+        await setDoc(doc(state.db, 'bengutaslar', bt.uid), bt, { merge: true });
+      } catch (err) {}
     }
-    showToast('📨 Doğrulama bağlantısı e-posta adresine tekrar gönderildi!');
-  });
-
-  document.getElementById('checkVerifyBtn')?.addEventListener('click', async () => {
-    if (state.isFirebaseLive && state.auth?.currentUser) {
-      await state.auth.currentUser.reload();
-      if (state.auth.currentUser.emailVerified) {
-        state.currentUser.emailVerified = true;
-        if (state.myBenguTas) state.myBenguTas.verified = true;
-        updateAuthUI();
-        showToast('🛡️ E-posta doğrulaman onaylandı! Artık bütün otağlarda söz söyleyebilirsin.');
-      } else {
-        showToast('⏳ Henüz e-postadaki bağlantıya tıklanmamış görünüyor. Gelen kutunu kontrol et kanka.');
-      }
-      return;
-    }
-    if (state.currentUser) {
-      state.currentUser.emailVerified = true;
-      if (state.myBenguTas) state.myBenguTas.verified = true;
-      updateAuthUI();
-      showToast('🛡️ E-posta doğrulaman onaylandı! Otağlarda söz söyleyebilirsin.');
-    }
-  });
-
-  // Çıkış Yap
-  document.getElementById('signOutBtn')?.addEventListener('click', async () => {
-    if (state.isFirebaseLive && state.auth && state.firebaseModules) {
-      await state.firebaseModules.signOut(state.auth);
-    }
-    state.currentUser = null;
-    state.myBenguTas = null;
-    updateAuthUI();
-    showToast('Otağdan çıkış yapıldı.');
   });
 }
 
 // ============================================================================
-// 6. ARKA PLAN KURULTAY ATEŞİ KIVILCIMLARI & GÖKTÜRK YILDIZLARI
+// 6. ARKA PLAN KIVILCIM TUVALİ
 // ============================================================================
 function initEmberCanvas() {
   const canvas = document.getElementById('otukenEmberCanvas');
@@ -1385,13 +1326,13 @@ function initEmberCanvas() {
   resize();
   window.addEventListener('resize', resize);
 
-  const embers = Array.from({ length: 42 }, () => ({
+  const embers = Array.from({ length: 36 }, () => ({
     x: Math.random() * window.innerWidth,
     y: Math.random() * window.innerHeight,
-    r: 1 + Math.random() * 2.4,
-    vx: (Math.random() - 0.5) * 0.45,
-    vy: -0.35 - Math.random() * 0.75,
-    alpha: 0.25 + Math.random() * 0.65,
+    r: 1 + Math.random() * 2.2,
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: -0.35 - Math.random() * 0.65,
+    alpha: 0.25 + Math.random() * 0.6,
     isCyan: Math.random() > 0.68
   }));
 
@@ -1399,7 +1340,7 @@ function initEmberCanvas() {
     if (!document.hidden) {
       ctx.clearRect(0, 0, w, h);
       for (const e of embers) {
-        e.x += e.vx + Math.sin(e.y * 0.02) * 0.2;
+        e.x += e.vx + Math.sin(e.y * 0.02) * 0.18;
         e.y += e.vy;
         if (e.y < -10) {
           e.y = h + 10;
@@ -1419,14 +1360,14 @@ function initEmberCanvas() {
 }
 
 // ============================================================================
-// 7. SAĞ ALT 3B HAREKETLİ BOZKURT (THREE.JS) & GERÇEK BOZKURT ULUMA KAYDI
+// 7. SAĞ ALT 3B HAREKETLİ BOZKURT & GERÇEK BOZKURT ULUMA SESİ
 // ============================================================================
 let wolfRealAudio = null;
 let wolfFadeInterval = null;
 let isWolfMuted = false;
 let wolfHowlCallback = null;
 
-function playSynthesizedWolfHowl() {
+function playRealWolfHowl() {
   if (isWolfMuted) return;
   try {
     if (!wolfRealAudio) {
@@ -1443,12 +1384,9 @@ function playSynthesizedWolfHowl() {
     wolfRealAudio.pause();
     wolfRealAudio.currentTime = 0;
     wolfRealAudio.volume = 0.9;
-    const playPromise = wolfRealAudio.play();
-    if (playPromise && typeof playPromise.catch === 'function') {
-      playPromise.catch(() => {});
-    }
+    const p = wolfRealAudio.play();
+    if (p && typeof p.catch === 'function') p.catch(() => {});
 
-    // İlk 5.2 saniyedeki tekil ve gür Bozkurt ulumasını çalıp sonunda yumuşakça kıs
     setTimeout(() => {
       if (!wolfRealAudio || wolfRealAudio.paused) return;
       wolfFadeInterval = setInterval(() => {
@@ -1464,9 +1402,7 @@ function playSynthesizedWolfHowl() {
         }
       }, 90);
     }, 4400);
-  } catch (e) {
-    console.warn('Bozkurt ses kaydı çalınamadı:', e);
-  }
+  } catch (e) {}
 }
 
 function triggerWolfHowl(withSound = true) {
@@ -1488,10 +1424,7 @@ function initThreeWolfStage() {
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
-  // Işıklandırma (Göktürk Turkuazı Ay Işığı + Kurultay Ateşi Kehribarı)
-  const ambient = new THREE.AmbientLight(0x334155, 1.5);
-  scene.add(ambient);
-
+  scene.add(new THREE.AmbientLight(0x334155, 1.5));
   const moonLight = new THREE.DirectionalLight(0x38bdf8, 2.4);
   moonLight.position.set(-4, 6, 4);
   scene.add(moonLight);
@@ -1500,46 +1433,28 @@ function initThreeWolfStage() {
   fireLight.position.set(3, 1, 3);
   scene.add(fireLight);
 
-  // 1. Ötüken Kayası Kaidesi
-  const rockMat = new THREE.MeshStandardMaterial({
-    color: 0x1e293b,
-    roughness: 0.85,
-    metalness: 0.15,
-    flatShading: true
-  });
+  const rockMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.85, metalness: 0.15, flatShading: true });
   const rockGeo = new THREE.DodecahedronGeometry(1.35, 1);
   rockGeo.scale(1.35, 0.55, 1.1);
   const rockMesh = new THREE.Mesh(rockGeo, rockMat);
   rockMesh.position.set(0, 0.05, 0);
   scene.add(rockMesh);
 
-  // Kaya Üzerinde Parlayan Kut Kristali
-  const runeMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
-  const runeGeo = new THREE.OctahedronGeometry(0.14, 0);
-  const runeCrystal = new THREE.Mesh(runeGeo, runeMat);
+  const runeCrystal = new THREE.Mesh(
+    new THREE.OctahedronGeometry(0.14, 0),
+    new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+  );
   runeCrystal.position.set(0.85, 0.42, 0.55);
   scene.add(runeCrystal);
 
-  // 2. 3B Anatomik Bozkurt (Gökbörü) Grubu
   const wolfRoot = new THREE.Group();
   wolfRoot.position.set(0, 0.42, 0);
   scene.add(wolfRoot);
 
-  const furDarkMat = new THREE.MeshStandardMaterial({
-    color: 0x475569,
-    roughness: 0.65,
-    metalness: 0.1,
-    flatShading: true
-  });
-  const furSilverMat = new THREE.MeshStandardMaterial({
-    color: 0x94a3b8,
-    roughness: 0.6,
-    metalness: 0.1,
-    flatShading: true
-  });
+  const furDarkMat = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.65, metalness: 0.1, flatShading: true });
+  const furSilverMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.6, metalness: 0.1, flatShading: true });
   const eyeGlowMat = new THREE.MeshBasicMaterial({ color: 0xfbbf24 });
 
-  // Gövde (Torso) & Göğüs Yelesi (Chest Mane)
   const bodyGroup = new THREE.Group();
   wolfRoot.add(bodyGroup);
 
@@ -1557,13 +1472,11 @@ function initThreeWolfStage() {
   chestMesh.position.set(0, 0.84, 0.48);
   bodyGroup.add(chestMesh);
 
-  // Boyun & Baş Grubu (Ulurken Göğe Kalkan Eklemli Kısım)
   const neckPivot = new THREE.Group();
   neckPivot.position.set(0, 1.02, 0.55);
   bodyGroup.add(neckPivot);
 
-  const neckGeo = new THREE.CylinderGeometry(0.22, 0.3, 0.48, 8);
-  const neckMesh = new THREE.Mesh(neckGeo, furSilverMat);
+  const neckMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.3, 0.48, 8), furSilverMat);
   neckMesh.position.set(0, 0.18, 0.08);
   neckMesh.rotation.x = 0.35;
   neckPivot.add(neckMesh);
@@ -1574,17 +1487,14 @@ function initThreeWolfStage() {
 
   const skullGeo = new THREE.DodecahedronGeometry(0.24, 1);
   skullGeo.scale(0.92, 0.88, 1.12);
-  const skullMesh = new THREE.Mesh(skullGeo, furDarkMat);
-  headGroup.add(skullMesh);
+  headGroup.add(new THREE.Mesh(skullGeo, furDarkMat));
 
-  // Üst Burun (Snout)
   const snoutGeo = new THREE.ConeGeometry(0.15, 0.46, 6);
   snoutGeo.rotateX(Math.PI / 2);
   const snoutMesh = new THREE.Mesh(snoutGeo, furSilverMat);
   snoutMesh.position.set(0, -0.02, 0.34);
   headGroup.add(snoutMesh);
 
-  // Alt Çene (Ulurken Açılan Eklemli Çene)
   const jawPivot = new THREE.Group();
   jawPivot.position.set(0, -0.1, 0.15);
   headGroup.add(jawPivot);
@@ -1595,7 +1505,6 @@ function initThreeWolfStage() {
   jawMesh.position.set(0, 0, 0.16);
   jawPivot.add(jawMesh);
 
-  // Dik Bozkurt Kulakları
   const earGeo = new THREE.ConeGeometry(0.08, 0.24, 4);
   const earL = new THREE.Mesh(earGeo, furDarkMat);
   earL.position.set(0.13, 0.26, -0.04);
@@ -1607,7 +1516,6 @@ function initThreeWolfStage() {
   earR.rotation.z = 0.15;
   headGroup.add(earR);
 
-  // Parlayan Bozkurt Gözleri
   const eyeGeo = new THREE.SphereGeometry(0.032, 8, 8);
   const eyeL = new THREE.Mesh(eyeGeo, eyeGlowMat);
   eyeL.position.set(0.11, 0.06, 0.2);
@@ -1617,22 +1525,19 @@ function initThreeWolfStage() {
   eyeR.position.set(-0.11, 0.06, 0.2);
   headGroup.add(eyeR);
 
-  // 4 Bacak
   const legGeo = new THREE.CylinderGeometry(0.08, 0.055, 0.72, 6);
-  const legPositions = [
+  [
     [0.18, 0.36, 0.45, 0.06],
     [-0.18, 0.36, 0.45, 0.06],
     [0.17, 0.34, -0.52, -0.12],
     [-0.17, 0.34, -0.52, -0.12]
-  ];
-  legPositions.forEach(([lx, ly, lz, rotX]) => {
+  ].forEach(([lx, ly, lz, rotX]) => {
     const leg = new THREE.Mesh(legGeo, furDarkMat);
     leg.position.set(lx, ly, lz);
     leg.rotation.x = rotX;
     wolfRoot.add(leg);
   });
 
-  // Gür Kuyruk
   const tailPivot = new THREE.Group();
   tailPivot.position.set(0, 0.68, -0.68);
   bodyGroup.add(tailPivot);
@@ -1643,28 +1548,6 @@ function initThreeWolfStage() {
   tailMesh.position.set(0, -0.18, -0.26);
   tailPivot.add(tailMesh);
 
-  // Uluma Anında Ağızdan Çıkan Kut & Buhar Parçacıkları
-  const mistCount = 45;
-  const mistGeo = new THREE.BufferGeometry();
-  const mistPos = new Float32Array(mistCount * 3);
-  const mistVel = [];
-  for (let i = 0; i < mistCount; i++) {
-    mistPos[i * 3] = 0;
-    mistPos[i * 3 + 1] = -50;
-    mistPos[i * 3 + 2] = 0;
-    mistVel.push({ vx: 0, vy: 0, vz: 0, life: 0 });
-  }
-  mistGeo.setAttribute('position', new THREE.BufferAttribute(mistPos, 3));
-  const mistMat = new THREE.PointsMaterial({
-    color: 0x38bdf8,
-    size: 0.14,
-    transparent: true,
-    opacity: 0.8
-  });
-  const mistPoints = new THREE.Points(mistGeo, mistMat);
-  scene.add(mistPoints);
-
-  // Uluma Durumu
   let isHowling = false;
   let howlTimer = 0;
   const HOWL_DURATION = 5.2;
@@ -1675,10 +1558,9 @@ function initThreeWolfStage() {
     isHowling = true;
     howlTimer = 0;
     if (statusPill) statusPill.classList.add('show');
-    if (withSound) playSynthesizedWolfHowl();
+    if (withSound) playRealWolfHowl();
   };
 
-  // Tıklama ve Buton Bağlantıları
   canvas.addEventListener('click', () => triggerWolfHowl(true));
   document.getElementById('howlTriggerBtn')?.addEventListener('click', () => triggerWolfHowl(true));
 
@@ -1686,22 +1568,11 @@ function initThreeWolfStage() {
   if (muteBtn) {
     muteBtn.addEventListener('click', () => {
       isWolfMuted = !isWolfMuted;
+      if (isWolfMuted && wolfRealAudio) wolfRealAudio.pause();
       muteBtn.textContent = isWolfMuted ? '🔇' : '🔊';
-      showToast(isWolfMuted ? '🔇 Bozkurt uluma sesi kapatıldı.' : '🔊 Bozkurt uluma sesi açıldı.');
+      showToast(isWolfMuted ? '🔇 Bozkurt sesi kapatıldı.' : '🔊 Bozkurt sesi açıldı.');
     });
   }
-
-  // Her 42 saniyede bir otomatik uluma
-  setInterval(() => {
-    if (!document.hidden && !isHowling) {
-      triggerWolfHowl(true);
-    }
-  }, 42000);
-
-  // İlk açılışta 2.5 saniye sonra selam uluma animasyonu
-  setTimeout(() => {
-    if (!document.hidden) triggerWolfHowl(false);
-  }, 2200);
 
   let lastTime = performance.now();
   function animateWolf() {
@@ -1711,11 +1582,8 @@ function initThreeWolfStage() {
     lastTime = now;
     const t = now * 0.001;
 
-    // Kaya kristali dönüşü
     runeCrystal.rotation.y = t * 1.4;
     runeCrystal.position.y = 0.42 + Math.sin(t * 2.5) * 0.04;
-
-    // Kuyruk ve göğüs nefes hareketi
     tailPivot.rotation.y = Math.sin(t * 2.2) * 0.22;
     bodyGroup.position.y = Math.sin(t * 2.8) * 0.015;
     wolfRoot.rotation.y = -0.35 + Math.sin(t * 0.5) * 0.12;
@@ -1723,31 +1591,11 @@ function initThreeWolfStage() {
     if (isHowling) {
       howlTimer += dt;
       const p = Math.min(1, howlTimer / HOWL_DURATION);
-      // Yumuşak zarf (0 -> 1 -> 0)
       const env = p < 0.2 ? (p / 0.2) : (p > 0.8 ? (1 - (p - 0.8) / 0.2) : 1);
-
-      // Boyun ve baş gökyüzüne kalkar, alt çene açılır
       neckPivot.rotation.x = -env * 0.72;
       headGroup.rotation.x = -env * 0.48;
-      headGroup.rotation.y = Math.sin(t * 6) * 0.04 * env;
       jawPivot.rotation.x = env * 0.42;
       eyeGlowMat.color.setHex(0x38bdf8);
-
-      // Nefes / Kut buharı parçacıkları
-      if (p > 0.15 && p < 0.85) {
-        const arr = mistGeo.attributes.position.array;
-        for (let i = 0; i < mistCount; i++) {
-          if (mistVel[i].life <= 0 && Math.random() < 0.22) {
-            arr[i * 3] = 0.25 + (Math.random() - 0.5) * 0.1;
-            arr[i * 3 + 1] = 2.05;
-            arr[i * 3 + 2] = 0.85;
-            mistVel[i].vx = (Math.random() - 0.5) * 0.015;
-            mistVel[i].vy = 0.02 + Math.random() * 0.025;
-            mistVel[i].vz = 0.01 + Math.random() * 0.02;
-            mistVel[i].life = 1;
-          }
-        }
-      }
 
       if (howlTimer >= HOWL_DURATION) {
         isHowling = false;
@@ -1755,34 +1603,17 @@ function initThreeWolfStage() {
         if (statusPill) statusPill.classList.remove('show');
       }
     } else {
-      // Sakin nöbet duruşu (Etrafı kolaçan etme)
       neckPivot.rotation.x *= 0.9;
       headGroup.rotation.x = Math.sin(t * 1.3) * 0.06;
       headGroup.rotation.y = Math.sin(t * 0.9) * 0.25;
       jawPivot.rotation.x *= 0.85;
     }
 
-    // Buhar parçacıklarını güncelle
-    const arr = mistGeo.attributes.position.array;
-    for (let i = 0; i < mistCount; i++) {
-      if (mistVel[i].life > 0) {
-        arr[i * 3] += mistVel[i].vx;
-        arr[i * 3 + 1] += mistVel[i].vy;
-        arr[i * 3 + 2] += mistVel[i].vz;
-        mistVel[i].life -= 0.025;
-        if (mistVel[i].life <= 0) arr[i * 3 + 1] = -50;
-      }
-    }
-    mistGeo.attributes.position.needsUpdate = true;
-
     renderer.render(scene, camera);
   }
   animateWolf();
 }
 
-// ============================================================================
-// 8. BAŞLATICI
-// ============================================================================
 document.addEventListener('DOMContentLoaded', () => {
   loadLocalState();
   bindUIEvents();

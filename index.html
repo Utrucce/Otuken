@@ -4,581 +4,522 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta name="theme-color" content="#060911">
-  <title>ÖTÜKEN | Erkekler İçin Kardeşlik, Disiplin, Bilgelik ve Gelişim Ocağı</title>
-  <meta name="description" content="Ötüken: Spor, kitap tahlili, robotik kodlama, yazılım, doğa ve hayat tecrübesi otağlarıyla erkeklerin birbirini geliştirdiği canlı kurultay ve gelişim topluluğu.">
+  <title>ÖTÜKEN | Erlerin Gelişim Ağı</title>
+  <meta name="description" content="Ötüken: Spor, kitap, robotik kodlama, yazılım ve tecrübe paylaşımı için canlı gelişim topluluğu.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- Arka Plan Kurultay Ateşi Kıvılcımları ve Göktürk Yıldızları Tuvali -->
+  <!-- Arka Plan Kıvılcım Tuvali -->
   <canvas id="otukenEmberCanvas" aria-hidden="true"></canvas>
 
-  <!-- Sağ Alt 3B Hareketli Bozkurt & Uluma Sahnesi -->
-  <div class="wolf-stage-widget" aria-label="Ötüken 3B Bozkurt Muhafızı">
+  <!-- Sağ Alt 3B Hareketli Bozkurt & Gerçek Uluma Sesi -->
+  <div class="wolf-stage-widget" aria-label="Ötüken 3B Bozkurt">
     <div id="wolfStatusPill" class="wolf-status-pill">🐺 Gökbörü Uluyor...</div>
     <canvas id="wolfThreeCanvas" title="Bozkurdu ulutmak için tıkla"></canvas>
     <div class="wolf-controls">
-      <button type="button" id="howlTriggerBtn" class="wolf-howl-btn" title="Bozkurdu Ulut">
-        <span>🐺</span> Bozkurdu Ulut
+      <button type="button" id="howlTriggerBtn" class="wolf-howl-btn">
+        <span>🐺</span> Ulut
       </button>
-      <button type="button" id="wolfMuteBtn" class="wolf-mute-btn" title="Uluma Sesini Aç / Kapat" aria-label="Ses Aç Kapat">
+      <button type="button" id="wolfMuteBtn" class="wolf-mute-btn" title="Sesi Aç / Kapat">
         🔊
       </button>
     </div>
   </div>
 
-  <!-- Üst Gezinme Çubuğu -->
-  <header class="otuken-header">
-    <div class="container header-inner">
-      <a href="#top" class="brand-identity">
-        <img src="assets/kurt.png" alt="Ötüken Bozkurt Arması" class="brand-wolf-crest">
-        <div class="brand-titles">
-          <h1>ÖTÜKEN <span class="rune-divider">𐱅𐰇𐰼𐰰</span></h1>
-          <span>ERKEKLER İÇİN KARDEŞLİK, DİSİPLİN VE GELİŞİM OCAĞI</span>
+  <!-- =====================================================================
+       1. GİRİŞ & KAYIT KAPISI (KULLANICI GİRİŞ YAPMADAN SİTEYE GİREMEZ)
+       ===================================================================== -->
+  <section id="authGateScreen" class="auth-gate-screen">
+    <div class="auth-gate-card">
+      <div class="auth-gate-header">
+        <img src="assets/kurt.png" alt="Ötüken Arması" class="auth-gate-logo">
+        <h1>ÖTÜKEN <span class="rune-divider">𐱅𐰇𐰼𐰰</span></h1>
+        <p>Spor • Kitap • Robotik Kodlama • Yazılım • Kardeşlik Ağı</p>
+      </div>
+
+      <!-- Giriş / Kayıt Sekme Seçici -->
+      <div class="auth-gate-tabs">
+        <button type="button" id="gateTabLogin" class="gate-tab-btn active">🔑 Giriş Yap</button>
+        <button type="button" id="gateTabRegister" class="gate-tab-btn">🛡️ Yeni Kayıt Ol</button>
+      </div>
+
+      <!-- ADIM A: GİRİŞ VEYA KAYIT FORMU -->
+      <div id="authStepFormBox">
+        <button type="button" id="googleSignInBtn" class="btn btn-cyan auth-google-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.35 11.1h-9.17v2.73h6.51c-.33 3.81-3.5 5.44-6.5 5.44C8.36 19.27 5 15.25 5 12c0-3.25 3.36-7.27 7.2-7.27 3.09 0 4.9 1.97 4.9 1.97L19 4.72S16.56 2 12.1 2C6.42 2 2.03 6.8 2.03 12c0 5.05 4.13 10 10.22 10 5.35 0 9.25-3.67 9.25-9.09 0-1.15-.15-1.81-.15-1.81Z"/></svg>
+          Gmail (Google) ile Hızlı Doğrulanmış Giriş
+        </button>
+
+        <div class="auth-divider"><span>veya e-posta ile</span></div>
+
+        <form id="emailAuthForm" class="auth-form">
+          <div id="registerFieldsBox" style="display: none;">
+            <div class="form-group">
+              <label>Alp Adı / Mahlas</label>
+              <input type="text" id="authNameInput" class="input-field" placeholder="Adın veya Mahlasın (Örn: Sertan Çubukcu)" maxlength="45">
+            </div>
+
+            <div class="form-group">
+              <label>Türk Damganı Seç</label>
+              <div id="gateTamgaSelector" class="gate-tamga-row">
+                <button type="button" class="gate-tamga-btn selected" data-tamga="🐺">🐺</button>
+                <button type="button" class="gate-tamga-btn" data-tamga="🦅">🦅</button>
+                <button type="button" class="gate-tamga-btn" data-tamga="🏹">🏹</button>
+                <button type="button" class="gate-tamga-btn" data-tamga="🔨">🔨</button>
+                <button type="button" class="gate-tamga-btn" data-tamga="📜">📜</button>
+                <button type="button" class="gate-tamga-btn" data-tamga="🔥">🔥</button>
+                <button type="button" class="gate-tamga-btn" data-tamga="🛡️">🛡️</button>
+                <button type="button" class="gate-tamga-btn" data-tamga="⚔️">⚔️</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>İlgi / Gelişim Alanın</label>
+              <input type="text" id="authCraftInput" class="input-field" placeholder="Örn: Spor, Yazılım, Robotik, Kitap..." maxlength="80">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Gmail / E-posta Adresi</label>
+            <input type="email" id="authEmailInput" class="input-field" placeholder="ornek@gmail.com" required>
+          </div>
+
+          <div class="form-group">
+            <label>Şifre</label>
+            <input type="password" id="authPasswordInput" class="input-field" placeholder="En az 6 karakter" minlength="6" required>
+          </div>
+
+          <!-- Kayıt Olurken Zorunlu Kullanıcı Sözleşmesi Onayı -->
+          <div id="termsConsentRow" class="terms-consent-row" style="display: none;">
+            <label class="checkbox-label">
+              <input type="checkbox" id="acceptTermsCheckbox">
+              <span>
+                <button type="button" class="inline-link-btn" id="openTermsFromGateBtn">Kullanıcı Sözleşmesi</button> ve
+                <button type="button" class="inline-link-btn" id="openGuideFromGateBtn">Kullanım Talimatı</button>'nı okudum, kabul ediyorum.
+              </span>
+            </label>
+          </div>
+
+          <button type="submit" id="emailAuthSubmitBtn" class="btn btn-gold auth-submit-btn">
+            🔑 Otağa Giriş Yap
+          </button>
+        </form>
+      </div>
+
+      <!-- ADIM B: E-POSTA DOĞRULAMA EKRANI -->
+      <div id="authStepVerifyBox" style="display: none; text-align: center;">
+        <div style="font-size: 2.6rem; margin-bottom: 8px;">📧</div>
+        <h3 style="color: #fff; margin-bottom: 6px;">E-posta Doğrulama Adımı</h3>
+        <p id="verifyStepDesc" style="font-size: 0.86rem; color: var(--text-secondary); margin-bottom: 14px;">
+          Hesabını doğrulamak için e-postana gönderilen bağlantıyı onayla veya aşağıdaki doğrulama kodunu gir:
+        </p>
+        <div id="verifyCodeDisplayBox" class="verify-code-box">
+          <span>Tek Kullanımlık Doğrulama Kodun:</span>
+          <strong id="generatedVerifyCode">------</strong>
         </div>
-      </a>
-
-      <nav class="nav-tabs" aria-label="Kurultay Bölümleri">
-        <button type="button" class="nav-tab-btn active" data-view="otaglar">
-          <span>🏛️</span> Otağlar &amp; Kurultay
-        </button>
-        <button type="button" class="nav-tab-btn" data-view="zincir">
-          <span>⛓️</span> İrade Zinciri
-        </button>
-        <button type="button" class="nav-tab-btn" data-view="anda">
-          <span>🤝</span> Anda (Yol Arkadaşı)
-        </button>
-        <button type="button" class="nav-tab-btn" data-view="toy">
-          <span>⚖️</span> Toy Kararı
-        </button>
-        <button type="button" class="nav-tab-btn" data-view="bengutas">
-          <span>🗿</span> Bengü Taşım (Er Künyesi)
-        </button>
-      </nav>
-
-      <div class="header-auth-zone">
-        <span id="firebaseStatusBadge" class="pill-badge green" title="Firebase Ücretsiz Katman (Spark) Canlı Bağlantı Durumu">
-          <span>🔥</span> <span id="firebaseStatusText">Canlı Ocak Aktif</span>
-        </span>
-        <div id="guestAuthActions">
-          <button type="button" id="openAuthModalBtn" class="btn btn-gold">
-            <span>🔑</span> Otağa Gir / Kaydol
+        <input type="text" id="verifyCodeInput" class="input-field" placeholder="6 haneli doğrulama kodunu yaz..." maxlength="6" style="text-align: center; font-size: 1.15rem; letter-spacing: 4px; font-weight: 700; margin-bottom: 12px;">
+        <div style="display: flex; gap: 8px;">
+          <button type="button" id="confirmVerifyCodeBtn" class="btn btn-gold" style="flex: 1;">
+            🛡️ Doğrula ve Otağa Gir
+          </button>
+          <button type="button" id="backToAuthBtn" class="btn btn-ghost">
+            Geri
           </button>
         </div>
-        <div id="userAuthActions" style="display: none; align-items: center; gap: 8px;">
-          <button type="button" id="openMyBenguTasBtn" class="btn btn-cyan" style="padding: 7px 13px;">
+      </div>
+
+      <div class="auth-gate-footer">
+        <button type="button" class="inline-link-btn" id="footerGuideBtn">🧭 Kullanım Talimatı</button>
+        <span>•</span>
+        <button type="button" class="inline-link-btn" id="footerTermsBtn">📜 Kullanıcı Sözleşmesi</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       2. ANA UYGULAMA EKRANI (SOSYAL MEDYA DÜZENİ — GİRİŞ SONRASI AÇILIR)
+       ===================================================================== -->
+  <div id="appShell" style="display: none;">
+
+    <!-- ÜST BAR (SOSYAL MEDYA GEZİNME PANELİ) -->
+    <header class="otuken-header">
+      <div class="container header-inner">
+        <div class="brand-identity" id="brandHomeBtn" style="cursor: pointer;">
+          <img src="assets/kurt.png" alt="Ötüken" class="brand-wolf-crest">
+          <div class="brand-titles">
+            <h1>ÖTÜKEN</h1>
+            <span id="firebaseStatusText">Canlı Akış</span>
+          </div>
+        </div>
+
+        <nav class="nav-tabs" aria-label="Ana Menü">
+          <button type="button" class="nav-tab-btn active" data-view="otaglar">
+            <span>🏠</span> Akış
+          </button>
+          <button type="button" class="nav-tab-btn" data-view="zincir">
+            <span>⛓️</span> İrade Zinciri
+          </button>
+          <button type="button" class="nav-tab-btn" data-view="anda">
+            <span>🤝</span> Anda Bul
+          </button>
+          <button type="button" class="nav-tab-btn" data-view="toy">
+            <span>⚖️</span> Oylama
+          </button>
+          <button type="button" class="nav-tab-btn" data-view="bengutas">
+            <span>🗿</span> Bengü Taşım
+          </button>
+          <button type="button" class="nav-tab-btn" data-view="kilavuz">
+            <span>📖</span> Kılavuz &amp; Sözleşme
+          </button>
+        </nav>
+
+        <div class="header-auth-zone">
+          <button type="button" id="openMyBenguTasBtn" class="btn btn-cyan user-pill-btn">
             <span id="navUserTamga">🐺</span>
             <span id="navUserName">Alp</span>
             <span id="navUserKut" class="alp-rank-tag">100 Kut</span>
           </button>
-          <button type="button" id="signOutBtn" class="btn btn-ghost" style="padding: 7px 11px;" title="Otağdan Çıkış Yap">
+          <button type="button" id="signOutBtn" class="btn btn-ghost" style="padding: 7px 11px;" title="Çıkış Yap">
             Çıkış
           </button>
         </div>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <main class="container" id="top">
+    <main class="container app-main">
 
-    <!-- E-posta Doğrulama Kalkanı (Doğrulanmamış E-posta Hesapları İçin) -->
-    <div id="emailVerifyBanner" class="verification-banner" style="display: none;">
-      <div>
-        <strong style="color: var(--fire-amber); display: block; font-size: 0.95rem;">
-          📧 E-posta Doğrulama Mühürü Bekleniyor
-        </strong>
-        <span style="font-size: 0.84rem; color: var(--text-secondary);">
-          Otağlarda Bitig (yazıt) paylaşabilmek, sohbet edebilmek ve İrade Zincirine katılabilmek için e-postana gönderilen doğrulama bağlantısına tıklamalısın.
-        </span>
-      </div>
-      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <button type="button" id="resendVerifyBtn" class="btn btn-gold" style="padding: 7px 12px; font-size: 0.8rem;">
-          📨 Doğrulama E-postasını Tekrar Gönder
-        </button>
-        <button type="button" id="checkVerifyBtn" class="btn btn-cyan" style="padding: 7px 12px; font-size: 0.8rem;">
-          🔄 Doğruladım, Kontrol Et
-        </button>
-      </div>
-    </div>
+      <!-- ===================================================================
+           SEKME 1: ANA SOSYAL AKIŞ & OTAĞLAR
+           =================================================================== -->
+      <div id="view-otaglar" class="otuken-view active-view">
+        <div class="social-layout">
 
-    <!-- Kahraman (Hero) Karşılama Alanı -->
-    <section class="otuken-hero">
-      <div class="hero-top-badges">
-        <span class="pill-badge gold">🐺 Kutlu Ötüken Kurultayı</span>
-        <span class="pill-badge">🛡️ Gmail &amp; E-posta Doğrulamalı Kardeşlik Ocağı</span>
-        <span class="pill-badge green">⚡ Kuvvet • Bilgelik • Zanaat • İrade</span>
-      </div>
-
-      <div class="hero-grid">
-        <div>
-          <h2 class="hero-title">
-            Demir Döven, Kitap Okuyan, Kod Yazan ve İradesini Çelikleştiren Erlerin Ocağı: <span class="highlight">ÖTÜKEN</span>
-          </h2>
-          <p class="hero-desc">
-            Ötüken; boş vakit öldüren sosyal ağların aksine erkeklerin <strong>sporda, kitap ve tefekkürde, robotik kodlamada, yazılımda ve hayat mücadelesinde</strong> birbirini yukarı çektiği canlı gelişim otağıdır. Burada herkes öğrendiğini aktarır, irade zincirini kırmaz ve kendi <strong>Bengü Taşını (Er Künyesini)</strong> liyakatle inşa eder.
-          </p>
-          <div class="hero-stats-row">
-            <div class="stat-stone">
-              <strong id="statOtagCount">6</strong>
-              <span>Gelişim Otağı</span>
-            </div>
-            <div class="stat-stone">
-              <strong id="statBitigCount">0</strong>
-              <span>Paylaşılan Bitig</span>
-            </div>
-            <div class="stat-stone">
-              <strong id="statAlpCount">0</strong>
-              <span>Kayıtlı Alp Künyesi</span>
-            </div>
-            <div class="stat-stone">
-              <strong id="statTotalStreak">0</strong>
-              <span>Toplam İrade Günü</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-oath-card">
-          <h3>🔥 Ötüken Töresi &amp; Kardeşlik İlkeleri</h3>
-          <ul>
-            <li>⚔️ <strong>1. Gelişim Esası:</strong> Her gün bedenini, zihnini veya zanaatını bir adım ileri taşı.</li>
-            <li>📚 <strong>2. Bilgi Zekâtı:</strong> Okuduğun kitabı, çözdüğün kodu, kurduğun devreyi ve tecrübeni otağdaşlarınla paylaş.</li>
-            <li>🤝 <strong>3. Yoldaşlık (Anda) Hukuku:</strong> Küçümseme yok; düşeni kaldırmak, bilmeyene yol göstermek töredir.</li>
-            <li>🛡️ <strong>4. Doğrulanmış Er Meydanı:</strong> Yalnızca Gmail veya e-posta doğrulamasından geçmiş gerçek kişiler söz söyleyebilir.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================================================================
-         GÖRÜNÜM 1: OTAĞLAR & KURULTAY (ANA AKIŞ)
-         =================================================================== -->
-    <div id="view-otaglar" class="otuken-view">
-      <div class="otuken-layout">
-
-        <!-- SOL SÜTUN: OTAĞLAR LİSTESİ & RÜTBE REHBERİ -->
-        <aside>
-          <div class="stone-card">
-            <div class="stone-card-header">
-              <h2>🏕️ Gelişim Otağları</h2>
-              <span style="font-size: 0.74rem; color: var(--turk-cyan-light);">Oda Seç</span>
-            </div>
-            <div id="otagSelectorList" class="otag-list">
-              <!-- JS tarafından doldurulur -->
-            </div>
-          </div>
-
-          <div class="stone-card">
-            <div class="stone-card-header">
-              <h3>🎖️ Liyakat &amp; Kut Rütbeleri</h3>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem;">
-              <div style="display: flex; justify-content: space-between; padding: 6px 10px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-                <span>🛡️ <strong>Er</strong> (Yeni Katılan)</span>
-                <span style="color: var(--text-muted);">0+ Kut</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; padding: 6px 10px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-                <span>⚔️ <strong>Alp</strong></span>
-                <span style="color: var(--turk-cyan-light);">100+ Kut</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; padding: 6px 10px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-                <span>🏹 <strong>Bahadır</strong></span>
-                <span style="color: var(--emerald-kut);">300+ Kut</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; padding: 6px 10px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-                <span>📜 <strong>Bilge</strong></span>
-                <span style="color: var(--purple-bilge);">600+ Kut</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; padding: 6px 10px; background: rgba(255,255,255,0.03); border-radius: 8px;">
-                <span>🐺 <strong>Toy Beyi</strong></span>
-                <span style="color: var(--fire-amber);">1000+ Kut</span>
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        <!-- ORTA SÜTUN: SEÇİLİ OTAĞ, OCAK BAŞI ANLIK SOHBET & BİTİG AKIŞI -->
-        <section>
-          <!-- Seçili Otağ Başlığı -->
-          <div id="activeOtagBanner" class="active-otag-banner">
-            <div>
-              <span id="activeOtagBadge" class="pill-badge gold" style="margin-bottom: 6px;">🏛️ Ulu Kurultay</span>
-              <h2 id="activeOtagTitle" style="font-family: 'Outfit', sans-serif; font-size: 1.45rem; color: #fff;">Bütün Otağlar — Ortak Kurultay Akışı</h2>
-              <p id="activeOtagDesc" style="font-size: 0.86rem; color: var(--text-secondary);">Spor, kitap, robotik kodlama, yazılım ve hayat tecrübesi otağlarında paylaşılan tüm güncel bitigler.</p>
-            </div>
-            <button type="button" id="focusNewBitigBtn" class="btn btn-gold">
-              ✍️ Yeni Bitig (Deneyim) Yaz
-            </button>
-          </div>
-
-          <!-- Ocak Başı Anlık Canlı Sohbet Şeridi -->
-          <div class="campfire-chat-box">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-              <strong style="font-size: 0.88rem; color: var(--fire-amber); display: flex; align-items: center; gap: 6px;">
-                🔥 Ocak Başı Anlık Sohbet (<span id="chatOtagLabel">Kurultay Meydanı</span>)
-              </strong>
-              <span style="font-size: 0.74rem; color: var(--text-muted);">Canlı Selamlaşma &amp; Kısa İstişare</span>
-            </div>
-            <div id="campfireChatStrip" class="chat-messages-strip">
-              <!-- JS tarafından doldurulur -->
-            </div>
-            <form id="campfireChatForm" class="chat-input-row">
-              <input type="text" id="campfireChatInput" class="input-field" placeholder="Ocak başına söz bırak (Örn: Selamünaleyküm alpler, bugünkü idman tamam!)..." maxlength="280" required>
-              <button type="submit" class="btn btn-cyan" style="flex-shrink: 0;">Gönder</button>
-            </form>
-          </div>
-
-          <!-- Yeni Bitig (Deneyim / Kod / Kitap / Antrenman) Oluşturma Ocağı -->
-          <div class="stone-card" id="bitigComposerCard">
-            <div class="stone-card-header">
-              <h3>🪶 Otağa Bitig (Deneyim, Kitap Tahlili, Kod veya Antrenman) Bırak</h3>
-              <span style="font-size: 0.76rem; color: var(--fire-amber);">+25 Kut Kazandırır</span>
-            </div>
-            <form id="newBitigForm" style="display: flex; flex-direction: column; gap: 12px;">
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <!-- SOL SÜTUN: OTAĞ KANALLARI & KISA KÜNYE -->
+          <aside class="left-sidebar">
+            <div class="stone-card compact-card">
+              <div class="user-mini-card">
+                <div id="sideTamgaBox" class="alp-tamga-avatar">🐺</div>
                 <div>
-                  <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Hangi Otağda Paylaşılacak?</label>
-                  <select id="bitigOtagSelect" class="select-field" required>
-                    <option value="kurultay">🔥 Kurultay Meydanı (Tanışma &amp; Genel)</option>
-                    <option value="spor">🏋️‍♂️ Alp Otağı (Spor, Kuvvet &amp; Disiplin)</option>
-                    <option value="kitap">📚 Bilge Otağı (Kitap Sohbeti, Tarih &amp; Felsefe)</option>
-                    <option value="robotik">🤖 Demirci Otağı (Robotik Kodlama &amp; Donanım)</option>
-                    <option value="yazilim">💻 Bilişim &amp; Yazılım Otağı (Yapay Zekâ &amp; Kod)</option>
-                    <option value="kervan">🧭 Kervan &amp; Tecrübe Otağı (Kariyer &amp; Doğa)</option>
-                  </select>
-                </div>
-                <div>
-                  <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Bitig Başlığı</label>
-                  <input type="text" id="bitigTitleInput" class="input-field" placeholder="Örn: Arduino ile Otonom Engelden Kaçan Araç Devrem / Bu Haftaki Kitap Tahlilim" maxlength="120" required>
+                  <strong id="sideAlpName">Alp</strong>
+                  <div class="user-mini-badges">
+                    <span id="sideAlpRank" class="alp-rank-tag">Er</span>
+                    <span id="sideAlpKut">100 Kut</span>
+                    <span id="sideAlpStreak">🔥 1G</span>
+                  </div>
                 </div>
               </div>
+              <button type="button" id="dailyCheckInBtn" class="btn btn-gold" style="width: 100%; margin-top: 10px; padding: 8px; font-size: 0.8rem;">
+                🔥 Günlük Yoklama Ver (+15 Kut)
+              </button>
+            </div>
 
-              <div>
-                <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Deneyimin, Analizin veya Tavsiyen</label>
-                <textarea id="bitigBodyInput" class="textarea-field" placeholder="Edindiğin tecrübeyi, okuduğun kitaptan çıkardığın dersi, antrenman sistemini veya projeni detaylıca anlat..." maxlength="2500" required></textarea>
-              </div>
+            <div class="stone-card compact-card">
+              <h3 class="sidebar-heading">🏕️ Otağ Kanalları</h3>
+              <div id="otagSelectorList" class="otag-list"></div>
+            </div>
+          </aside>
 
-              <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 10px;">
-                <div>
-                  <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Kod Bloğu / Kitap Alıntısı / Antrenman Tablosu (İsteğe Bağlı)</label>
-                  <input type="text" id="bitigSnippetInput" class="input-field" placeholder="Örn: void setup() { pinMode(13, OUTPUT); } veya 'Bilgi, eyleme dönüşmediğinde yüktür.'" maxlength="600">
+          <!-- ORTA SÜTUN: SOSYAL MEDYA PAYLAŞIM KUTUSU + AKIŞ -->
+          <section class="center-feed">
+
+            <!-- Hızlı Gönderi (Bitig) Oluşturucu — Tıpkı X / Instagram Gibi Kolay -->
+            <div class="stone-card composer-box">
+              <form id="newBitigForm">
+                <div class="composer-top">
+                  <div id="composerTamga" class="alp-tamga-avatar">🐺</div>
+                  <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                    <input type="text" id="bitigTitleInput" class="input-field" placeholder="Başlık (Örn: Bugünkü antrenmanım / Arduino projem / Kitap notum)" maxlength="120" required>
+                    <textarea id="bitigBodyInput" class="textarea-field" placeholder="Neler yaptın, ne öğrendin? Deneyimini kardeşlerinle paylaş..." rows="3" maxlength="3000" required></textarea>
+                  </div>
                 </div>
-                <div>
-                  <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Etiketler (Virgülle ayır)</label>
-                  <input type="text" id="bitigTagsInput" class="input-field" placeholder="Kalistenik, Arduino, Python, Kitap" maxlength="100">
+
+                <!-- İsteğe Bağlı Kod / Alıntı ve Etiket Alanı (Tek Tıkla Açılır) -->
+                <div id="composerExtraFields" style="display: none; margin-top: 10px; gap: 8px; flex-direction: column;">
+                  <textarea id="bitigSnippetInput" class="textarea-field" style="min-height: 60px; font-family: monospace;" placeholder="Varsa kod parçası, devre notu, kitap alıntısı veya idman seti..."></textarea>
+                  <input type="text" id="bitigTagsInput" class="input-field" placeholder="Etiketler (virgülle: spor, kitap, arduino, yazılım)">
                 </div>
-              </div>
 
-              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                <span style="font-size: 0.78rem; color: var(--text-muted);">
-                  🛡️ Paylaşımlar senin <strong>Bengü Taşın (Er Künyen)</strong> ve doğrulama mührünle yayınlanır.
-                </span>
-                <button type="submit" class="btn btn-gold">
-                  🔥 Bitigi Otağa Mühürle (+25 Kut)
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <!-- Arama & Filtreleme Çubuğu -->
-          <div style="display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;">
-            <input type="search" id="bitigSearchInput" class="input-field" style="flex: 1;" placeholder="🔍 Bitiglerde, kitaplarda, kodlarda veya alp künyelerinde ara...">
-          </div>
-
-          <!-- Canlı Bitigler (Paylaşımlar) Akışı -->
-          <div id="bitigFeedContainer">
-            <!-- JS tarafından doldurulur -->
-          </div>
-        </section>
-
-        <!-- SAĞ SÜTUN: KULLANICI BENGÜ TAŞI ÖZETİ, HIZLI ZİNCİR & KURULTAY LİDERLERİ -->
-        <aside>
-          <!-- Hızlı Bengü Taş (Er Künyesi) Özeti -->
-          <div class="bengu-tas-card" style="margin-bottom: 20px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-              <span class="pill-badge gold">🗿 Bengü Taş (Er Künyesi)</span>
-              <span id="sideVerifyBadge" class="pill-badge green" style="font-size: 0.7rem;">🛡️ Mühürlü</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-              <div id="sideTamgaBox" class="alp-tamga-avatar" style="width: 54px; height: 54px; font-size: 1.7rem;">🐺</div>
-              <div>
-                <h3 id="sideAlpName" style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: #fff;">Misafir Yolcu</h3>
-                <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 3px;">
-                  <span id="sideAlpRank" class="alp-rank-tag">Yolcu</span>
-                  <span id="sideAlpKut" style="font-size: 0.78rem; color: var(--turk-cyan-light); font-weight: 700;">0 Kut</span>
-                  <span id="sideAlpStreak" style="font-size: 0.78rem; color: var(--fire-amber); font-weight: 700;">🔥 0 Gün</span>
+                <div class="composer-WaitBar">
+                  <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <select id="bitigOtagSelect" class="select-field" style="width: auto; padding: 6px 10px; font-size: 0.82rem;">
+                      <option value="kurultay">🔥 Kurultay Meydanı</option>
+                      <option value="spor">🏋️‍♂️ Alp Otağı (Spor)</option>
+                      <option value="kitap">📚 Bilge Otağı (Kitap)</option>
+                      <option value="robotik">🤖 Demirci Otağı (Robotik)</option>
+                      <option value="yazilim">💻 Bilişim &amp; Yazılım</option>
+                      <option value="kervan">🧭 Kervan &amp; Tecrübe</option>
+                    </select>
+                    <button type="button" id="toggleComposerExtraBtn" class="btn btn-ghost" style="padding: 6px 10px; font-size: 0.78rem;">
+                      ➕ Kod / Alıntı / Etiket Ekle
+                    </button>
+                  </div>
+                  <button type="submit" class="btn btn-gold" style="padding: 8px 18px;">
+                    🔥 Paylaş
+                  </button>
                 </div>
+              </form>
+            </div>
+
+            <!-- Arama ve Aktif Kanal Başlığı -->
+            <div class="feed-filter-bar">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span id="activeOtagBadge" class="pill-badge gold">🏛️ Tüm Otağlar</span>
+                <span id="statBitigCount" style="font-size: 0.78rem; color: var(--text-muted);">0 Paylaşım</span>
               </div>
+              <input type="search" id="bitigSearchInput" class="input-field" style="max-width: 220px; padding: 6px 12px; font-size: 0.82rem;" placeholder="🔍 Akışta ara...">
             </div>
-            <p id="sideAlpMotto" style="font-size: 0.83rem; color: var(--text-secondary); font-style: italic; margin-bottom: 12px;">
-              "Kendi Bengü Taşını dikmek, otağlarda söz söylemek ve irade zincirine katılmak için giriş yap."
-            </p>
-            <div id="sideAlpDetails" style="font-size: 0.8rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px;">
-              <div>📖 <strong>Okuduğu Eser:</strong> <span id="sideAlpBook">Belirtilmedi</span></div>
-              <div>⚒️ <strong>Üzerinde Çalıştığı Pusat:</strong> <span id="sideAlpProject">Belirtilmedi</span></div>
-              <div>🏋️‍♂️ <strong>Spor Disiplini:</strong> <span id="sideAlpSport">Belirtilmedi</span></div>
-            </div>
-            <button type="button" id="sideEditBenguBtn" class="btn btn-cyan" style="width: 100%;">
-              🗿 Bengü Taşımı (Künyemi) Düzenle
-            </button>
-          </div>
 
-          <!-- Günlük İrade Zinciri Hızlı Yoklama -->
-          <div class="stone-card">
-            <div class="stone-card-header">
-              <h3>⛓️ Günlük İrade Yoklaması</h3>
-              <span style="font-size: 0.74rem; color: var(--fire-amber);">+15 Kut</span>
-            </div>
-            <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 12px;">
-              Bugün antrenmanını yaptın mı, kitabını okudun mu veya kod/robotik projen üzerinde çalıştın mı? Zinciri kırma!
-            </p>
-            <button type="button" id="dailyCheckInBtn" class="btn btn-gold" style="width: 100%; margin-bottom: 10px;">
-              🔥 Bugünkü Antımı Tamamladım (+15 Kut)
-            </button>
-            <div id="dailyCheckInStatus" style="font-size: 0.76rem; color: var(--text-muted); text-align: center;">
-              Her gün yoklama vererek İrade Serini büyüt.
-            </div>
-          </div>
+            <!-- Gönderi Akışı -->
+            <div id="bitigFeedContainer" class="bitig-feed"></div>
+          </section>
 
-          <!-- Ötüken Bilge & Bahadırlar Divanı (Liyakat Sıralaması) -->
-          <div class="stone-card">
-            <div class="stone-card-header">
-              <h3>🏆 Ötüken Liyakat Divanı</h3>
-              <span style="font-size: 0.73rem; color: var(--text-muted);">En Yüksek Kut</span>
+          <!-- SAĞ SÜTUN: CANLI SOHBET & LİYAKAT SIRALAMASI -->
+          <aside class="right-sidebar">
+            <div class="stone-card compact-card">
+              <div class="stone-card-header" style="margin-bottom: 8px; padding-bottom: 6px;">
+                <h3 class="sidebar-heading" style="margin: 0;">💬 Ocak Başı Canlı Sohbet</h3>
+                <span id="chatOtagLabel" style="font-size: 0.72rem; color: var(--turk-cyan-light);">Kurultay</span>
+              </div>
+              <div id="campfireChatStrip" class="campfire-chat-strip"></div>
+              <form id="campfireChatForm" style="display: flex; gap: 6px; margin-top: 8px;">
+                <input type="text" id="campfireChatInput" class="input-field" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="Mesaj yaz..." maxlength="240" required>
+                <button type="submit" class="btn btn-cyan" style="padding: 7px 12px; font-size: 0.8rem;">Gönder</button>
+              </form>
             </div>
-            <div id="leaderboardList" style="display: flex; flex-direction: column; gap: 9px;">
-              <!-- JS tarafından doldurulur -->
+
+            <div class="stone-card compact-card">
+              <div class="stone-card-header" style="margin-bottom: 8px; padding-bottom: 6px;">
+                <h3 class="sidebar-heading" style="margin: 0;">🏆 Liyakat Divanı</h3>
+                <span id="statAlpCount" style="font-size: 0.72rem; color: var(--text-muted);">0 Üye</span>
+              </div>
+              <div id="leaderboardList" style="display: flex; flex-direction: column; gap: 7px;"></div>
             </div>
-          </div>
-        </aside>
+          </aside>
 
-      </div>
-    </div>
-
-    <!-- ===================================================================
-         GÖRÜNÜM 2: İRADE ZİNCİRİ (ZİNCİRİ KIRMA & ORTAK MEYDAN OKUMALAR)
-         =================================================================== -->
-    <div id="view-zincir" class="otuken-view" style="display: none;">
-      <div class="stone-card">
-        <div class="stone-card-header">
-          <div>
-            <h2>⛓️ Pusat &amp; İrade Zinciri — Ortak Meydan Okumalar</h2>
-            <p style="font-size: 0.86rem; color: var(--text-secondary); margin-top: 4px;">
-              Erkeklerin disiplinini çelikleştiren 30 günlük ortak irade seferleri. Katıl, her gün mührünü vur ve zinciri asla kırma!
-            </p>
-          </div>
-        </div>
-        <div id="challengesGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
-          <!-- JS tarafından doldurulur -->
         </div>
       </div>
-    </div>
 
-    <!-- ===================================================================
-         GÖRÜNÜM 3: ANDA (YOL ARKADAŞI / USTA-ÇIRAK & BADİLİK OCAĞI)
-         =================================================================== -->
-    <div id="view-anda" class="otuken-view" style="display: none;">
-      <div class="stone-card">
-        <div class="stone-card-header" style="flex-wrap: wrap;">
-          <div>
-            <h2>🤝 Anda &amp; Yol Arkadaşı (Usta-Çırak / Badilik) Ocağı</h2>
-            <p style="font-size: 0.86rem; color: var(--text-secondary); margin-top: 4px;">
-              Bildiğin zanaatı bir kardeşine öğret, öğrenmek istediğin alanda kendine bir yol arkadaşı (Anda / Badi) bul!
-            </p>
-          </div>
-          <button type="button" id="openNewAndaFormBtn" class="btn btn-gold">
-            🤝 Yeni Yol Arkadaşı Çağrısı Bırak
-          </button>
-        </div>
-
-        <form id="newAndaForm" style="display: none; background: rgba(255,255,255,0.03); border: 1px solid var(--border-gold); border-radius: 12px; padding: 16px; margin-bottom: 18px; gap: 12px; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-            <div>
-              <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Aktarabileceğim Uzmanlık / Tecrübe (Ne Öğretebilirsin?)</label>
-              <input type="text" id="andaOfferInput" class="input-field" placeholder="Örn: Python, Android Studio, Kalistenik İdmanı, Türk Edebiyatı" required>
-            </div>
-            <div>
-              <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Gelişmek İstediğim Alan (Ne Arıyorsun?)</label>
-              <input type="text" id="andaSeekInput" class="input-field" placeholder="Örn: Arduino & Robotik, Düzenli Koşu Badisi, Kitap Kritiği" required>
-            </div>
-          </div>
-          <div>
-            <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Çalışma Düzeni &amp; İletişim Notu</label>
-            <input type="text" id="andaNoteInput" class="input-field" placeholder="Örn: Haftada 3 akşam 21.00'de çevrim içi kodlama ve günlük spor takibi yapabilecek bir anda arıyorum." required>
-          </div>
-          <div style="display: flex; justify-content: flex-end; gap: 8px;">
-            <button type="button" id="cancelAndaFormBtn" class="btn btn-ghost">Vazgeç</button>
-            <button type="submit" class="btn btn-gold">🤝 Çağrıyı Kurultaya İlan Et (+20 Kut)</button>
-          </div>
-        </form>
-
-        <div id="andaCardsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 16px;">
-          <!-- JS tarafından doldurulur -->
-        </div>
-      </div>
-    </div>
-
-    <!-- ===================================================================
-         GÖRÜNÜM 4: TOY KARARI (HAFTALIK KURULTAY OYLAMALARI)
-         =================================================================== -->
-    <div id="view-toy" class="otuken-view" style="display: none;">
-      <div class="stone-card">
-        <div class="stone-card-header">
-          <div>
-            <h2>⚖️ Toy Kararı — Haftalık Kurultay Oylamaları</h2>
-            <p style="font-size: 0.86rem; color: var(--text-secondary); margin-top: 4px;">
-              Bu ay hep birlikte okuyacağımız eseri, geliştireceğimiz açık kaynak/robotik projesini ve ortak idman hedefimizi oyluyoruz.
-            </p>
-          </div>
-        </div>
-        <div id="toyPollsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px;">
-          <!-- JS tarafından doldurulur -->
-        </div>
-      </div>
-    </div>
-
-    <!-- ===================================================================
-         GÖRÜNÜM 5: BENGÜ TAŞIM (ER KÜNYESİ & ALPLER DİZİNİ)
-         =================================================================== -->
-    <div id="view-bengutas" class="otuken-view" style="display: none;">
-      <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 22px;">
-        <!-- Kişisel Bengü Taş (Er Künyesi) Düzenleme Ocağı -->
-        <div class="bengu-tas-card">
-          <div class="stone-card-header">
-            <h2>🗿 Bengü Taşım (Er Künyesi &amp; Ant Yazıtı)</h2>
-          </div>
-          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 14px;">
-            Ötüken'de her erin zanaatını, okuduğu eseri, spor disiplinini, pusatını ve antını mermeri delercesine kazıdığı <strong>Bengü Taşı (Ebedî Er Künyesi)</strong> vardır.
-          </p>
-          <form id="benguTasForm" style="display: flex; flex-direction: column; gap: 12px;">
-            <div>
-              <label style="font-size: 0.78rem; color: var(--text-muted); display: block;">Türk Damganı (Tamganı) Seç</label>
-              <div id="tamgaSelectorGrid" class="tamga-selector-grid">
-                <div class="tamga-option selected" data-tamga="🐺"><div style="font-size: 1.4rem;">🐺</div><small>Gökbörü</small></div>
-                <div class="tamga-option" data-tamga="🦅"><div style="font-size: 1.4rem;">🦅</div><small>Çift Başlı Kartal</small></div>
-                <div class="tamga-option" data-tamga="🏹"><div style="font-size: 1.4rem;">🏹</div><small>Ok ve Yay</small></div>
-                <div class="tamga-option" data-tamga="🔨"><div style="font-size: 1.4rem;">🔨</div><small>Demirci Örsü</small></div>
-                <div class="tamga-option" data-tamga="📜"><div style="font-size: 1.4rem;">📜</div><small>Bilge Tomarı</small></div>
-                <div class="tamga-option" data-tamga="🔥"><div style="font-size: 1.4rem;">🔥</div><small>Kurultay Ateşi</small></div>
-                <div class="tamga-option" data-tamga="🛡️"><div style="font-size: 1.4rem;">🛡️</div><small>Kalkan</small></div>
-                <div class="tamga-option" data-tamga="⚔️"><div style="font-size: 1.4rem;">⚔️</div><small>Kılıç</small></div>
-              </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-              <div>
-                <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Alp Adı / Mahlası</label>
-                <input type="text" id="btNameInput" class="input-field" placeholder="Örn: Sertan Çubukcu" maxlength="50" required>
-              </div>
-              <div>
-                <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Menzil (Şehir / Diyar)</label>
-                <input type="text" id="btCityInput" class="input-field" placeholder="Örn: İstanbul" maxlength="40">
-              </div>
-            </div>
-
-            <div>
-              <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Zanaat / Uğraş Alanı</label>
-              <input type="text" id="btCraftInput" class="input-field" placeholder="Örn: Türkçe Öğretmeni, Yazılım & Eğitim Teknolojileri Geliştiricisi" maxlength="90">
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-              <div>
-                <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">📖 Şu An Okuduğum Kitap</label>
-                <input type="text" id="btBookInput" class="input-field" placeholder="Örn: Kutadgu Bilig / Türk Söylenceler Sözlüğü" maxlength="80">
-              </div>
-              <div>
-                <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">⚒️ Üzerinde Çalıştığım Pusat / Proje</label>
-                <input type="text" id="btProjectInput" class="input-field" placeholder="Örn: Ötüken Kurultayı & Arduino Devresi" maxlength="80">
-              </div>
-            </div>
-
-            <div>
-              <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">🏋️‍♂️ Spor &amp; Fiziksel Disiplin Hedefim</label>
-              <input type="text" id="btSportInput" class="input-field" placeholder="Örn: Haftada 4 gün kalistenik, 10 km koşu ve soğuk duş disiplini" maxlength="90">
-            </div>
-
-            <div>
-              <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">🔥 Alp Antı (Hayat Düsturum)</label>
-              <textarea id="btMottoInput" class="textarea-field" style="min-height: 70px;" placeholder="Örn: Her gün dünden daha güçlü bir beden, daha berrak bir zihin ve insanlığa faydalı bir eser üretmek için." maxlength="280"></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-gold" style="width: 100%;">
-              🗿 Bengü Taşımı Kaydet ve Mühürle
-            </button>
-          </form>
-        </div>
-
-        <!-- Ötüken Alpler Dizini (Diğer Üyelerin Bengü Taşları) -->
+      <!-- ===================================================================
+           SEKME 2: İRADE ZİNCİRİ (30 GÜNLÜK MEYDAN OKUMALAR)
+           =================================================================== -->
+      <div id="view-zincir" class="otuken-view" style="display: none;">
         <div class="stone-card">
           <div class="stone-card-header">
-            <h2>🐺 Ötüken Alpler Dizini (Dikili Bengü Taşlar)</h2>
+            <div>
+              <h2>⛓️ İrade Zinciri — 30 Günlük Meydan Okumalar</h2>
+              <p style="font-size: 0.84rem; color: var(--text-secondary);">Her gün antrenmanını, okumanı veya kodlamanı tamamla, zinciri kırma!</p>
+            </div>
           </div>
-          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 14px;">
-            Kurultaya katılmış, doğrulama mührünü almış ve gelişim otağlarında ter döken yoldaşlarımızın künyeleri:
-          </p>
-          <div id="alpDirectoryList" style="display: flex; flex-direction: column; gap: 12px;">
-            <!-- JS tarafından doldurulur -->
+          <div id="challengesGrid" class="cards-grid"></div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           SEKME 3: ANDA (YOL ARKADAŞI / BADİ BUL)
+           =================================================================== -->
+      <div id="view-anda" class="otuken-view" style="display: none;">
+        <div class="stone-card">
+          <div class="stone-card-header" style="flex-wrap: wrap;">
+            <div>
+              <h2>🤝 Anda (Yol Arkadaşı / Badi) Bul</h2>
+              <p style="font-size: 0.84rem; color: var(--text-secondary);">Bildiğin alanı öğret, gelişmek istediğin alanda kendine çalışma ortağı bul.</p>
+            </div>
+            <button type="button" id="openNewAndaFormBtn" class="btn btn-gold">
+              ➕ İlan Aç
+            </button>
+          </div>
+
+          <form id="newAndaForm" style="display: none; background: rgba(255,255,255,0.03); border: 1px solid var(--border-gold); border-radius: 12px; padding: 14px; margin-bottom: 16px; gap: 10px; flex-direction: column;">
+            <div class="two-col-grid">
+              <div>
+                <label class="field-label">Nelerde Yardımcı Olabilirsin?</label>
+                <input type="text" id="andaOfferInput" class="input-field" placeholder="Örn: Python, Kalistenik, Kitap Tahlili" required>
+              </div>
+              <div>
+                <label class="field-label">Ne İçin Yol Arkadaşı Arıyorsun?</label>
+                <input type="text" id="andaSeekInput" class="input-field" placeholder="Örn: Arduino & Robotik, Sabah Koşusu" required>
+              </div>
+            </div>
+            <div>
+              <label class="field-label">Kısa Notun</label>
+              <input type="text" id="andaNoteInput" class="input-field" placeholder="Örn: Haftada 3 akşam birlikte çalışacak bir yol arkadaşı arıyorum." required>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 8px;">
+              <button type="button" id="cancelAndaFormBtn" class="btn btn-ghost">İptal</button>
+              <button type="submit" class="btn btn-gold">🤝 İlanı Yayınla</button>
+            </div>
+          </form>
+
+          <div id="andaCardsGrid" class="cards-grid"></div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           SEKME 4: TOY KARARI (OYLAMALAR)
+           =================================================================== -->
+      <div id="view-toy" class="otuken-view" style="display: none;">
+        <div class="stone-card">
+          <div class="stone-card-header">
+            <div>
+              <h2>⚖️ Toy Kararı — Ortak Kitap &amp; Proje Oylaması</h2>
+              <p style="font-size: 0.84rem; color: var(--text-secondary);">Bu ay birlikte okuyacağımız kitabı ve geliştireceğimiz projeyi seçiyoruz.</p>
+            </div>
+          </div>
+          <div id="toyPollsGrid" class="cards-grid"></div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           SEKME 5: BENGÜ TAŞIM (ER KÜNYESİ & ÜYELER)
+           =================================================================== -->
+      <div id="view-bengutas" class="otuken-view" style="display: none;">
+        <div class="two-col-grid">
+          <div class="bengu-tas-card">
+            <div class="stone-card-header">
+              <h2>🗿 Bengü Taşım (Er Künyesi)</h2>
+            </div>
+            <form id="benguTasForm" style="display: flex; flex-direction: column; gap: 10px;">
+              <div>
+                <label class="field-label">Türk Damgan</label>
+                <div id="tamgaSelectorGrid" class="tamga-selector-grid">
+                  <div class="tamga-option selected" data-tamga="🐺"><div style="font-size: 1.3rem;">🐺</div><small>Gökbörü</small></div>
+                  <div class="tamga-option" data-tamga="🦅"><div style="font-size: 1.3rem;">🦅</div><small>Kartal</small></div>
+                  <div class="tamga-option" data-tamga="🏹"><div style="font-size: 1.3rem;">🏹</div><small>Ok-Yay</small></div>
+                  <div class="tamga-option" data-tamga="🔨"><div style="font-size: 1.3rem;">🔨</div><small>Demirci</small></div>
+                  <div class="tamga-option" data-tamga="📜"><div style="font-size: 1.3rem;">📜</div><small>Bilge</small></div>
+                  <div class="tamga-option" data-tamga="🔥"><div style="font-size: 1.3rem;">🔥</div><small>Ocak</small></div>
+                  <div class="tamga-option" data-tamga="🛡️"><div style="font-size: 1.3rem;">🛡️</div><small>Kalkan</small></div>
+                  <div class="tamga-option" data-tamga="⚔️"><div style="font-size: 1.3rem;">⚔️</div><small>Pusat</small></div>
+                </div>
+              </div>
+
+              <div class="two-col-grid">
+                <div>
+                  <label class="field-label">Alp Adı / Mahlas</label>
+                  <input type="text" id="btNameInput" class="input-field" placeholder="Adın veya Mahlasın" required>
+                </div>
+                <div>
+                  <label class="field-label">Şehir</label>
+                  <input type="text" id="btCityInput" class="input-field" placeholder="Örn: İstanbul">
+                </div>
+              </div>
+
+              <div>
+                <label class="field-label">Zanaat / Uzmanlık Alanı</label>
+                <input type="text" id="btCraftInput" class="input-field" placeholder="Örn: Öğretmen, Yazılımcı, Mühendis, Öğrenci">
+              </div>
+
+              <div class="two-col-grid">
+                <div>
+                  <label class="field-label">📖 Şu An Okuduğun Kitap</label>
+                  <input type="text" id="btBookInput" class="input-field" placeholder="Okuduğun eser">
+                </div>
+                <div>
+                  <label class="field-label">⚒️ Üzerinde Çalıştığın Proje</label>
+                  <input type="text" id="btProjectInput" class="input-field" placeholder="Geliştirdiğin proje">
+                </div>
+              </div>
+
+              <div>
+                <label class="field-label">🏋️‍♂️ Spor Hedefin</label>
+                <input type="text" id="btSportInput" class="input-field" placeholder="Örn: Haftada 4 gün ağırlık & koşu">
+              </div>
+
+              <div>
+                <label class="field-label">🔥 Hayat Düsturun (Antın)</label>
+                <textarea id="btMottoInput" class="textarea-field" style="min-height: 60px;" placeholder="Kısa hayat ilken..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-gold" style="width: 100%;">
+                🗿 Künyemi Kaydet
+              </button>
+            </form>
+          </div>
+
+          <div class="stone-card">
+            <div class="stone-card-header">
+              <h2>🐺 Kayıtlı Alpler Dizini</h2>
+            </div>
+            <div id="alpDirectoryList" style="display: flex; flex-direction: column; gap: 10px;"></div>
           </div>
         </div>
       </div>
-    </div>
 
-  </main>
+      <!-- ===================================================================
+           SEKME 6: KULLANIM TALİMATI & KULLANICI SÖZLEŞMESİ
+           =================================================================== -->
+      <div id="view-kilavuz" class="otuken-view" style="display: none;">
+        <div class="two-col-grid">
 
-  <!-- ===================================================================
-       MODAL 1: GİRİŞ & KAYIT (GMAIL DOĞRULAMA + E-POSTA DOĞRULAMA)
-       =================================================================== -->
-  <div id="authModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
-    <div class="modal-dialog">
-      <button type="button" id="closeAuthModalBtn" class="modal-close" aria-label="Kapat">&times;</button>
-      <div style="text-align: center; margin-bottom: 18px;">
-        <img src="assets/kurt.png" alt="Ötüken Arma" style="width: 56px; height: 56px; border-radius: 14px; border: 1.5px solid var(--fire-amber); margin-bottom: 8px;">
-        <h2 id="authModalTitle" style="font-family: 'Outfit', sans-serif; font-size: 1.4rem; color: #fff;">Ötüken Kurultayına Giriş</h2>
-        <p style="font-size: 0.84rem; color: var(--text-secondary);">
-          Gmail hesabınla tek tıkla doğrulanmış olarak gir veya e-posta adresine gelecek doğrulama bağlantısıyla kaydol.
-        </p>
+          <!-- KULLANIM TALİMATI -->
+          <div class="stone-card">
+            <div class="stone-card-header">
+              <h2>🧭 Ötüken Kullanım Talimatı (Adım Adım Rehber)</h2>
+            </div>
+            <div class="guide-steps-list">
+              <div class="guide-step-item">
+                <strong>1. Kayıt Ol ve Doğrulamanı Tamamla</strong>
+                <p>Gmail hesabınla tek tıkla veya e-posta adresinle kayıt olup doğrulama adımını tamamlayarak otağa adım at.</p>
+              </div>
+              <div class="guide-step-item">
+                <strong>2. Bengü Taşını (Er Künyeni) Oluştur</strong>
+                <p>Üst menüden <b>"🗿 Bengü Taşım"</b> sekmesine tıkla; Türk damganı seç, okuduğun kitabı, spor hedefini ve üzerinde çalıştığın projeyi kaydet.</p>
+              </div>
+              <div class="guide-step-item">
+                <strong>3. Otağ Kanalını Seç ve Paylaşım Yap</strong>
+                <p><b>"🏠 Akış"</b> sekmesinde sol menüden ilgi alanına uygun otağı (Spor, Kitap, Robotik Kodlama, Yazılım, Tecrübe) seç. Orta kısımdaki kutudan yaptığın çalışmaları, kodları veya kitap notlarını paylaş.</p>
+              </div>
+              <div class="guide-step-item">
+                <strong>4. Kut Ver, Yorum Yap ve Canlı Sohbete Katıl</strong>
+                <p>Diğer üyelerin paylaşımlarına <b>"🔥 Kut Ver"</b> diyerek destek ol, yorum yaz veya sağ sütundaki <b>"💬 Ocak Başı Canlı Sohbet"</b> alanından anlık mesajlaş.</p>
+              </div>
+              <div class="guide-step-item">
+                <strong>5. İrade Zincirini Kırma &amp; Anda Bul</strong>
+                <p><b>"⛓️ İrade Zinciri"</b> sekmesinden 30 günlük hedeflere katılıp her gün yoklama ver; <b>"🤝 Anda Bul"</b> sekmesinden kendine spor veya yazılım çalışma arkadaşı bul.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- KULLANICI SÖZLEŞMESİ -->
+          <div class="stone-card">
+            <div class="stone-card-header">
+              <h2>📜 Ötüken Kullanıcı Sözleşmesi ve Topluluk Kuralları</h2>
+            </div>
+            <div class="guide-steps-list">
+              <div class="guide-step-item">
+                <strong>Madde 1 — Amaç ve Kapsam</strong>
+                <p>Ötüken; üyelerin spor, kitap okuma, robotik kodlama, yazılım ve kişisel gelişim alanlarında bilgi ve tecrübe paylaşımı yaptığı ücretsiz bir gelişim topluluğudur.</p>
+              </div>
+              <div class="guide-step-item">
+                <strong>Madde 2 — Üyelik ve Doğrulama Şartı</strong>
+                <p>Toplulukta paylaşım ve yorum yapabilmek için gerçek bir e-posta/Gmail doğrulamasından geçmek zorunludur. Sahte, yanıltıcı veya başkasının adına hesap açılamaz.</p>
+              </div>
+              <div class="guide-step-item">
+                <strong>Madde 3 — Saygı, Kardeşlik ve İçerik Kuralları</strong>
+                <p>Küfür, hakaret, aşağılama, siyasi/ideolojik provokasyon, yasa dışı içerik, telif hakkı ihlali ve spam paylaşımlar kesinlikle yasaktır. Burada herkes birbirini geliştirmek ve desteklemekle yükümlüdür.</p>
+              </div>
+              <div class="guide-step-item">
+                <strong>Madde 4 — Gizlilik ve Veri Güvenliği</strong>
+                <p>Paylaştığınız Bengü Taş (Er Künyesi) bilgileri, gönderiler ve sohbet mesajları topluluk üyelerine görünür şekilde bulut veritabanında saklanır. E-posta adresiniz diğer kullanıcılara açık olarak gösterilmez.</p>
+              </div>
+              <div class="guide-step-item">
+                <strong>Madde 5 — Yaptırım ve Sorumluluk</strong>
+                <p>Her üye kendi paylaştığı içerikten bizzat sorumludur. Topluluk kurallarını ihlal eden paylaşımlar kaldırılır ve ilgili hesabın erişimi kısıtlanabilir.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
-      <!-- Google (Gmail) ile Tek Tıkla Doğrulanmış Giriş -->
-      <button type="button" id="googleSignInBtn" class="btn btn-cyan" style="width: 100%; padding: 12px; font-size: 0.92rem; margin-bottom: 16px;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.35 11.1h-9.17v2.73h6.51c-.33 3.81-3.5 5.44-6.5 5.44C8.36 19.27 5 15.25 5 12c0-3.25 3.36-7.27 7.2-7.27 3.09 0 4.9 1.97 4.9 1.97L19 4.72S16.56 2 12.1 2C6.42 2 2.03 6.8 2.03 12c0 5.05 4.13 10 10.22 10 5.35 0 9.25-3.67 9.25-9.09 0-1.15-.15-1.81-.15-1.81Z"/></svg>
-        Gmail (Google) ile Doğrulanmış Giriş Yap
-      </button>
-
-      <div style="text-align: center; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px;">
-        — VEYA E-POSTA DOĞRULAMALI HESAP İLE —
-      </div>
-
-      <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-        <button type="button" id="tabLoginBtn" class="btn btn-gold" style="flex: 1;">Giriş Yap</button>
-        <button type="button" id="tabRegisterBtn" class="btn btn-ghost" style="flex: 1;">Yeni Alp Kaydı (E-posta Onaylı)</button>
-      </div>
-
-      <form id="emailAuthForm" style="display: flex; flex-direction: column; gap: 11px;">
-        <div id="registerNameRow" style="display: none;">
-          <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Alp Adı / Mahlası</label>
-          <input type="text" id="authNameInput" class="input-field" placeholder="Örn: Sertan Çubukcu">
-        </div>
-        <div>
-          <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">E-posta Adresi (Gmail vb.)</label>
-          <input type="email" id="authEmailInput" class="input-field" placeholder="ornek@gmail.com" required>
-        </div>
-        <div>
-          <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Parola (En az 6 karakter)</label>
-          <input type="password" id="authPasswordInput" class="input-field" placeholder="••••••••" minlength="6" required>
-        </div>
-        <button type="submit" id="emailAuthSubmitBtn" class="btn btn-gold" style="width: 100%; margin-top: 4px;">
-          🔑 Otağa Giriş Yap
-        </button>
-      </form>
-    </div>
+    </main>
   </div>
 
-  <!-- ===================================================================
-       MODAL 2: BAŞKA BİR ALPİN BENGÜ TAŞINI (KÜNYESİNİ) İNCELEME
-       =================================================================== -->
+  <!-- MODAL 1: KÜNYE İNCELEME -->
   <div id="inspectBenguModal" class="modal-backdrop" role="dialog" aria-modal="true">
     <div class="modal-dialog">
       <button type="button" id="closeInspectBenguBtn" class="modal-close" aria-label="Kapat">&times;</button>
@@ -586,10 +527,16 @@
     </div>
   </div>
 
-  <!-- Bildirim Kutusu -->
+  <!-- MODAL 2: GİRİŞ EKRANINDAN SÖZLEŞME & KILAVUZ OKUMA -->
+  <div id="legalModal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal-dialog" style="max-width: 620px; max-height: 85vh; overflow-y: auto;">
+      <button type="button" id="closeLegalModalBtn" class="modal-close" aria-label="Kapat">&times;</button>
+      <div id="legalModalContent"></div>
+    </div>
+  </div>
+
   <div id="otukenToast" class="otuken-toast"></div>
 
-  <!-- Three.js 3B Motoru + Firebase Modüler SDK + Ötüken Çekirdek Scripti -->
   <script src="assets/three.min.js"></script>
   <script type="module" src="app.js"></script>
 </body>
